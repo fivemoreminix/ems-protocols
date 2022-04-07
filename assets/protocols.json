@@ -1,0 +1,22 @@
+{
+    "Section 1": {
+        "Subsection 1.1": {
+            "Item 1": "uri",
+            "Item 2": "uri"
+        },
+        "Subsection 1.2": {
+            "Item 1": "uri",
+            "Item 2": "uri"
+        }
+    },
+    "Section 2": {
+        "Subsection 2.1": {
+            "Item 1": "uri",
+            "Item 2": "uri"
+        },
+        "Subsection 2.2": {
+            "Item 1": "uri",
+            "Item 2": "uri"
+        }
+    }
+}
