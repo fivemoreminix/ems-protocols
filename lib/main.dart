@@ -1,9 +1,5 @@
-import 'dart:convert';
-import 'dart:io';
-
 import 'package:ems_protocols/protocols_menu.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 void main() {
   runApp(const MyApp());
@@ -55,9 +51,7 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       body: <Widget>[
         ProtocolsMenu(collection: widget.protocol),
-        ProtocolsMenu(
-          collection: widget.protocol,
-        ),
+        ProtocolsMenu(collection: widget.protocol),
       ][currentIndex],
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: currentIndex,
