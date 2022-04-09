@@ -1,3 +1,5 @@
+import 'package:ems_protocols/bookmarks.dart';
+import 'package:ems_protocols/profile.dart';
 import 'package:ems_protocols/protocols_menu.dart';
 import 'package:flutter/material.dart';
 
@@ -11,17 +13,16 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(primarySwatch: Colors.blue),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
+      title: 'EMS Protocols',
+      theme: ThemeData(primarySwatch: Colors.blueGrey),
+      home: MyHomePage(),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key? key, required this.title}) : super(key: key);
+  MyHomePage({Key? key}) : super(key: key);
 
-  final String title;
   ProtocolCollection protocol = ProtocolCollection(title: '', items: []);
 
   @override
@@ -49,7 +50,8 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       body: <Widget>[
         ProtocolsMenu(collection: widget.protocol),
-        ProtocolsMenu(collection: widget.protocol),
+        BookmarksPage(),
+        ProfilePage(),
       ][currentIndex],
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: currentIndex,
@@ -62,8 +64,12 @@ class _MyHomePageState extends State<MyHomePage> {
             icon: Icon(Icons.home),
           ),
           BottomNavigationBarItem(
-            label: 'Settings',
-            icon: Icon(Icons.settings),
+            label: "Bookmarks",
+            icon: Icon(Icons.bookmark),
+          ),
+          BottomNavigationBarItem(
+            label: 'Account',
+            icon: Icon(Icons.account_circle),
           ),
         ],
       ),
