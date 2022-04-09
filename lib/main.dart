@@ -2,8 +2,14 @@ import 'package:ems_protocols/home.dart';
 import 'package:ems_protocols/login.dart';
 import 'package:ems_protocols/root.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const MyApp());
 }
 
@@ -41,10 +47,10 @@ class _MyAppState extends State<MyApp> {
     //   and offer the user to log into an existing account or offer options for
     //   companies.
 
-    userAccount = Account(
-        email: 'thelukaswils@gmail.com',
-        name: 'Luke',
-        bookmarkedEntryNames: []);
+    // userAccount = Account(
+    //     email: 'thelukaswils@gmail.com',
+    //     name: 'Luke',
+    //     bookmarkedEntryNames: []);
   }
 
   @override
@@ -55,12 +61,7 @@ class _MyAppState extends State<MyApp> {
       theme: ThemeData(primarySwatch: Colors.indigo),
       routes: {
         '/': (context) {
-          if (userAccount == null) {
-            // TODO: or otherwise not able to auth
-            return const HomePage();
-          } else {
-            return RootPage(userAccount: userAccount!);
-          }
+          return const AuthGate();
         },
         '/home': (context) => const HomePage(),
         '/login': (context) => const LoginPage(),
