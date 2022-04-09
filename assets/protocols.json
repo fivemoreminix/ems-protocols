@@ -1,5 +1,9 @@
 {
-    "Section 1": {
+    "Appendix": {
+
+    },
+    "Acknowledgement": "uri",
+    "Cardiac": {
         "Subsection 1.1": {
             "Item 1": "uri",
             "Item 2": "uri"
@@ -9,7 +13,7 @@
             "Item 2": "uri"
         }
     },
-    "Section 2": {
+    "Environmental": {
         "Subsection 2.1": {
             "Item 1": "uri",
             "Item 2": "uri"
@@ -18,5 +22,27 @@
             "Item 1": "uri",
             "Item 2": "uri"
         }
+    },
+    "Medical": {
+
+    },
+    "Obstetrical": {
+
+    },
+    "Pediatric": {
+
+    },
+    "Procedural": {
+
+    },
+    "Reference Material": {
+
+    },
+    "Standard of Care": {
+        "Intubation": "uri",
+        "12-Leads": "uri"
+    },
+    "Trauma Protocol": {
+
     }
 }
