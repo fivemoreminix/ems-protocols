@@ -50,8 +50,8 @@ class _RootPageState extends State<RootPage> {
         }),
         items: const [
           BottomNavigationBarItem(
-            label: 'Home',
-            icon: Icon(Icons.home),
+            label: 'Protocols',
+            icon: Icon(Icons.book),
           ),
           BottomNavigationBarItem(
             label: 'Bookmarks',
