@@ -1,78 +1,69 @@
-import 'package:ems_protocols/bookmarks.dart';
-import 'package:ems_protocols/profile.dart';
-import 'package:ems_protocols/protocols_menu.dart';
+import 'package:ems_protocols/home.dart';
+import 'package:ems_protocols/login.dart';
+import 'package:ems_protocols/root.dart';
 import 'package:flutter/material.dart';
 
 void main() {
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class Account {
+  Account(
+      {required this.email,
+      required this.name,
+      required this.bookmarkedEntryNames});
+
+  String email;
+  String name;
+  List<String> bookmarkedEntryNames;
+}
+
+class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'EMS Protocols',
-      theme: ThemeData(primarySwatch: Colors.blueGrey),
-      home: MyHomePage(),
-    );
-  }
+  State<MyApp> createState() => _MyAppState();
 }
 
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key? key}) : super(key: key);
-
-  ProtocolCollection protocol = ProtocolCollection(title: '', items: []);
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  int currentIndex = 0;
+class _MyAppState extends State<MyApp> {
+  Account? userAccount;
 
   @override
   void initState() {
     super.initState();
 
-    loadProtocolsJson().then((value) {
-      if (value == null) {
-        throw ErrorDescription('Protocols is not a ProtocolCollection');
-      } else {
-        setState(() => widget.protocol = value);
-      }
-    });
+    // TODO: read from local database or settings about account info
+    // TODO: connect to firebase and auth with existing credentials
+    // TODO: send user to login page without credentials
+
+    // If user has an account, send them to RootPage or (/home)
+    // If user does not have an account, send them to HomePage or (/) to explain product
+    //   and offer the user to log into an existing account or offer options for
+    //   companies.
+
+    userAccount = Account(
+        email: 'thelukaswils@gmail.com',
+        name: 'Luke',
+        bookmarkedEntryNames: []);
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: <Widget>[
-        ProtocolsMenu(collection: widget.protocol),
-        BookmarksPage(),
-        ProfilePage(),
-      ][currentIndex],
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: currentIndex,
-        onTap: (index) => setState(() {
-          currentIndex = index;
-        }),
-        items: const [
-          BottomNavigationBarItem(
-            label: 'Home',
-            icon: Icon(Icons.home),
-          ),
-          BottomNavigationBarItem(
-            label: "Bookmarks",
-            icon: Icon(Icons.bookmark),
-          ),
-          BottomNavigationBarItem(
-            label: 'Account',
-            icon: Icon(Icons.account_circle),
-          ),
-        ],
-      ),
+    return MaterialApp(
+      title: 'EMS Protocols',
+      theme: ThemeData(primarySwatch: Colors.indigo),
+      routes: {
+        '/': (context) {
+          if (userAccount == null) {
+            // TODO: or otherwise not able to auth
+            return const HomePage();
+          } else {
+            return RootPage(userAccount: userAccount!);
+          }
+        },
+        '/home': (context) => const HomePage(),
+        '/login': (context) => const LoginPage(),
+      },
     );
   }
 }
