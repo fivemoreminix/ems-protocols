@@ -56,30 +56,32 @@ class ProtocolsMenu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-        itemCount: collection.items.length,
-        itemBuilder: (BuildContext context, int index) {
-          var item = collection.items[index];
-          return ListTile(
-            title: Text(item.title),
-            onTap: () => {
-              if (item is ProtocolCollection)
-                {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) =>
-                              ProtocolsMenu(collection: item)))
-                }
-              else if (item is ProtocolItem)
-                {launch(item.documentUri.toString())}
-              else
-                {
-                  throw ErrorDescription(
-                      'item must be either ProtocolCollection or ProtocolItem, is ${item.runtimeType} instead')
-                }
-            },
-          );
-        });
+    return Scaffold(
+        appBar: AppBar(title: Text(collection.title)),
+        body: ListView.builder(
+            itemCount: collection.items.length,
+            itemBuilder: (BuildContext context, int index) {
+              var item = collection.items[index];
+              return ListTile(
+                title: Text(item.title),
+                onTap: () => {
+                  if (item is ProtocolCollection)
+                    {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  ProtocolsMenu(collection: item)))
+                    }
+                  else if (item is ProtocolItem)
+                    {launch(item.documentUri.toString())}
+                  else
+                    {
+                      throw ErrorDescription(
+                          'item must be either ProtocolCollection or ProtocolItem, is ${item.runtimeType} instead')
+                    }
+                },
+              );
+            }));
   }
 }

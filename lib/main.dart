@@ -35,20 +35,18 @@ class _MyHomePageState extends State<MyHomePage> {
   void initState() {
     super.initState();
 
-    loadProtocolsJson().then((value) => {
-          if (value == null)
-            {throw ErrorDescription('Protocols is not a ProtocolCollection')}
-          else
-            {setState(() => widget.protocol = value)}
-        });
+    loadProtocolsJson().then((value) {
+      if (value == null) {
+        throw ErrorDescription('Protocols is not a ProtocolCollection');
+      } else {
+        setState(() => widget.protocol = value);
+      }
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
       body: <Widget>[
         ProtocolsMenu(collection: widget.protocol),
         ProtocolsMenu(collection: widget.protocol),
