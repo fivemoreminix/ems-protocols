@@ -73,11 +73,15 @@ Future<ProtocolCollection?> loadProtocolsJson() async {
 }
 
 class ProtocolsMenu extends StatefulWidget {
-  const ProtocolsMenu(
-      {Key? key, required this.collection, required this.userAccount})
+  ProtocolsMenu(
+      {Key? key,
+      required this.collection,
+      required this.userAccount,
+      required this.searchable})
       : super(key: key);
 
   final ProtocolCollection collection;
+  bool searchable = false;
   final Account userAccount;
 
   @override
@@ -88,7 +92,23 @@ class _ProtocolsMenuState extends State<ProtocolsMenu> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: Text(widget.collection.title)),
+        appBar: AppBar(
+          title: Text(widget.collection.title),
+          actions: widget.searchable
+              ? [
+                  IconButton(
+                    icon: const Icon(Icons.search),
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => ProtocolsSearchPage(
+                                  searchableCollection: widget.collection)));
+                    },
+                  )
+                ]
+              : null,
+        ),
         body: ListView.builder(
             itemCount: widget.collection.items.length,
             itemBuilder: (BuildContext context, int index) {
@@ -102,7 +122,8 @@ class _ProtocolsMenuState extends State<ProtocolsMenu> {
                           MaterialPageRoute(
                               builder: (context) => ProtocolsMenu(
                                   collection: item,
-                                  userAccount: widget.userAccount)));
+                                  userAccount: widget.userAccount,
+                                  searchable: false)));
                     } else if (item is ProtocolItem) {
                       launch(item.documentUri.toString());
                     } else {
@@ -140,5 +161,71 @@ class _ProtocolsMenuState extends State<ProtocolsMenu> {
                         : null;
                   }());
             }));
+  }
+}
+
+class ProtocolsSearchPage extends StatefulWidget {
+  const ProtocolsSearchPage({Key? key, required this.searchableCollection})
+      : super(key: key);
+
+  final ProtocolCollection searchableCollection;
+
+  @override
+  State<ProtocolsSearchPage> createState() => _ProtocolsSearchPageState();
+}
+
+class _ProtocolsSearchPageState extends State<ProtocolsSearchPage> {
+  final controller = TextEditingController();
+  List<ProtocolItem> matches = [];
+
+  void updateMatches(String text) {
+    matches.clear();
+    if (text.isEmpty) return;
+    var textLowercase = text.toLowerCase();
+    widget.searchableCollection.walkItems((item) {
+      if (item.title.toLowerCase().contains(textLowercase)) {
+        matches.add(item);
+      }
+      return false;
+    });
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    var searchTheme = Theme.of(context)
+        .textTheme
+        .apply(bodyColor: Theme.of(context).secondaryHeaderColor)
+        .titleLarge;
+
+    return Scaffold(
+      appBar: AppBar(
+        title: TextField(
+          autofocus: true,
+          controller: controller,
+          style: searchTheme,
+          decoration: InputDecoration(
+            hintText: 'Search protocols',
+            hintStyle: searchTheme?.copyWith(color: Colors.grey),
+          ),
+          showCursor: true,
+          cursorColor: searchTheme?.color,
+          onChanged: (contents) {
+            setState(() => updateMatches(contents));
+          },
+        ),
+      ),
+      body: ListView.builder(
+          itemCount: matches.length,
+          itemBuilder: (context, index) => ListTile(
+                title: Text(matches[index].title),
+                onTap: () {},
+              )),
+    );
   }
 }
