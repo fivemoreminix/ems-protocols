@@ -72,6 +72,42 @@ Future<ProtocolCollection?> loadProtocolsJson() async {
   return parseProtocolCollectionJson(jsonDecode(json));
 }
 
+Widget buildProtocolEntryListItem(BuildContext context,
+    {required ProtocolEntry item,
+    required List<String> bookmarkedEntryNames,
+    void Function()? onTap,
+    bool? showBookmarkButton,
+    required void Function(void Function()) setState}) {
+  return ListTile(
+      title: Text(item.title),
+      onTap: onTap,
+      trailing: () {
+        bool bookmarked = bookmarkedEntryNames.contains(item.title);
+        return (item is ProtocolItem)
+            ? IconButton(
+                icon: Icon(bookmarked
+                    ? Icons.bookmark_added_outlined
+                    : Icons.bookmark_add_outlined),
+                onPressed: () {
+                  if (bookmarked) {
+                    setState(() {
+                      bookmarkedEntryNames.remove(item.title);
+                    });
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        content: Text(
+                            '${item.title} has been removed from your bookmarks.')));
+                  } else {
+                    setState(() => bookmarkedEntryNames.add(item.title));
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        content: Text(
+                            '${item.title} has been added to your bookmarks.')));
+                  }
+                },
+              )
+            : null;
+      }());
+}
+
 class ProtocolsMenu extends StatefulWidget {
   ProtocolsMenu(
       {Key? key,
@@ -103,7 +139,8 @@ class _ProtocolsMenuState extends State<ProtocolsMenu> {
                           context,
                           MaterialPageRoute(
                               builder: (context) => ProtocolsSearchPage(
-                                  searchableCollection: widget.collection)));
+                                  searchableCollection: widget.collection,
+                                  userAccount: widget.userAccount)));
                     },
                   )
                 ]
@@ -113,62 +150,37 @@ class _ProtocolsMenuState extends State<ProtocolsMenu> {
             itemCount: widget.collection.items.length,
             itemBuilder: (BuildContext context, int index) {
               var item = widget.collection.items[index];
-              return ListTile(
-                  title: Text(item.title),
-                  onTap: () {
-                    if (item is ProtocolCollection) {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => ProtocolsMenu(
-                                  collection: item,
-                                  userAccount: widget.userAccount,
-                                  searchable: false)));
-                    } else if (item is ProtocolItem) {
-                      launch(item.documentUri.toString());
-                    } else {
-                      throw ErrorDescription(
-                          'item must be either ProtocolCollection or ProtocolItem, is ${item.runtimeType} instead');
-                    }
-                  },
-                  trailing: () {
-                    bool bookmarked = widget.userAccount.bookmarkedEntryNames
-                        .contains(item.title);
-                    return (item is ProtocolItem)
-                        ? IconButton(
-                            icon: Icon(bookmarked
-                                ? Icons.bookmark_added_outlined
-                                : Icons.bookmark_add_outlined),
-                            onPressed: () {
-                              if (bookmarked) {
-                                setState(() {
-                                  widget.userAccount.bookmarkedEntryNames
-                                      .remove(item.title);
-                                });
-                                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                                    content: Text(
-                                        '${item.title} has been removed from your bookmarks.')));
-                              } else {
-                                setState(() => widget
-                                    .userAccount.bookmarkedEntryNames
-                                    .add(item.title));
-                                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                                    content: Text(
-                                        '${item.title} has been added to your bookmarks.')));
-                              }
-                            },
-                          )
-                        : null;
-                  }());
+
+              return buildProtocolEntryListItem(context,
+                  item: item,
+                  bookmarkedEntryNames: widget.userAccount.bookmarkedEntryNames,
+                  setState: setState, onTap: () {
+                if (item is ProtocolCollection) {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => ProtocolsMenu(
+                              collection: item,
+                              userAccount: widget.userAccount,
+                              searchable: false)));
+                } else if (item is ProtocolItem) {
+                  launch(item.documentUri.toString());
+                } else {
+                  throw ErrorDescription(
+                      'item must be either ProtocolCollection or ProtocolItem, is ${item.runtimeType} instead');
+                }
+              });
             }));
   }
 }
 
 class ProtocolsSearchPage extends StatefulWidget {
-  const ProtocolsSearchPage({Key? key, required this.searchableCollection})
+  const ProtocolsSearchPage(
+      {Key? key, required this.searchableCollection, required this.userAccount})
       : super(key: key);
 
   final ProtocolCollection searchableCollection;
+  final Account userAccount;
 
   @override
   State<ProtocolsSearchPage> createState() => _ProtocolsSearchPageState();
@@ -222,8 +234,11 @@ class _ProtocolsSearchPageState extends State<ProtocolsSearchPage> {
       ),
       body: ListView.builder(
           itemCount: matches.length,
-          itemBuilder: (context, index) => ListTile(
-                title: Text(matches[index].title),
+          itemBuilder: (context, index) => buildProtocolEntryListItem(
+                context,
+                item: matches[index],
+                bookmarkedEntryNames: widget.userAccount.bookmarkedEntryNames,
+                setState: setState,
                 onTap: () {},
               )),
     );
