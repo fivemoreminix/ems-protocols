@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutterfire_ui/auth.dart';
 
 import 'main.dart';
 
@@ -37,6 +38,9 @@ class ProfilePage extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
+                const ProfileScreen(
+                  providerConfigs: [EmailProviderConfiguration()],
+                ),
                 Text("Hello, ${userAccount.name}",
                     style: Theme.of(context).textTheme.headline4),
                 Text(userAccount.email),

@@ -1,6 +1,8 @@
+import 'package:ems_protocols/root.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutterfire_ui/auth.dart';
+
+import 'main.dart';
 
 class AuthGate extends StatelessWidget {
   const AuthGate({Key? key}) : super(key: key);
@@ -10,33 +12,32 @@ class AuthGate extends StatelessWidget {
     return StreamBuilder<User?>(
       stream: FirebaseAuth.instance.authStateChanges(),
       builder: (context, snapshot) {
-        if (!snapshot.hasData) {
-          return SignInScreen(
-            headerBuilder: (context, constraints, _) {
-              return Padding(
-                padding: const EdgeInsets.all(20),
-                child: AspectRatio(
-                  aspectRatio: 1,
-                  child: Text('EMS Protocols',
-                      style: Theme.of(context).textTheme.headline2),
-                ),
-              );
-            },
-            providerConfigs: const [EmailProviderConfiguration()],
-          );
-        }
+        if (!snapshot.hasData) {}
 
-        return Text('AUTHENTICATED!!!!');
+        return RootPage(
+            userAccount:
+                Account(email: '', name: '', bookmarkedEntryNames: []));
       },
     );
   }
 }
 
-class LoginPage extends StatelessWidget {
-  const LoginPage({Key? key}) : super(key: key);
+class SigninPage extends StatelessWidget {
+  const SigninPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Text('');
+    return Column(
+      children: [
+        Text('User sign in'),
+        TextFormField(),
+        TextFormField(),
+        Center(
+            child: TextButton(
+          child: const Text('Sign in'),
+          onPressed: () {},
+        )),
+      ],
+    );
   }
 }
