@@ -31,9 +31,49 @@ class SigninPage extends StatefulWidget {
 }
 
 class _SigninPageState extends State<SigninPage> {
-  final emailController = TextEditingController();
-  final passController = TextEditingController();
+  bool showAdminForm = false;
 
+  @override
+  Widget build(BuildContext context) {
+    return GenericSignin(
+      onSwitchForms: () {
+        setState(() => showAdminForm = !showAdminForm);
+      },
+      subtitleText: showAdminForm ? 'For admins and owners' : 'For employees',
+      switchFormsText:
+          showAdminForm ? 'Go to employee login' : 'Go to owner login',
+      userFieldType:
+          showAdminForm ? _UserFieldType.email : _UserFieldType.username,
+    );
+  }
+}
+
+enum _UserFieldType {
+  email,
+  username,
+}
+
+class GenericSignin extends StatefulWidget {
+  const GenericSignin(
+      {Key? key,
+      required this.onSwitchForms,
+      required this.subtitleText,
+      required this.switchFormsText,
+      required this.userFieldType})
+      : super(key: key);
+
+  final Function() onSwitchForms;
+  final String subtitleText;
+  final String switchFormsText;
+  final _UserFieldType userFieldType;
+
+  @override
+  State<GenericSignin> createState() => _GenericSigninState();
+}
+
+class _GenericSigninState extends State<GenericSignin> {
+  final userController = TextEditingController();
+  final passController = TextEditingController();
   String? errorMessage;
   bool loading = false;
 
@@ -60,19 +100,22 @@ class _SigninPageState extends State<SigninPage> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Text(
-                      'For employees',
+                      widget.subtitleText,
                       style: Theme.of(context).textTheme.subtitle1,
                     ),
                     TextButton(
-                      child: const Text('Go to owner login'),
-                      onPressed: () {},
+                      child: Text(widget.switchFormsText),
+                      onPressed: widget.onSwitchForms,
                     ),
                   ],
                 )
               ]),
               TextFormField(
-                  controller: emailController,
-                  decoration: const InputDecoration(hintText: 'email address')),
+                  controller: userController,
+                  decoration: InputDecoration(
+                      hintText: (widget.userFieldType == _UserFieldType.email)
+                          ? 'email address'
+                          : 'username')),
               TextFormField(
                 controller: passController,
                 decoration: const InputDecoration(hintText: 'password'),
@@ -89,16 +132,25 @@ class _SigninPageState extends State<SigninPage> {
                   child: TextButton(
                 child: const Text('Sign in'),
                 onPressed: () async {
+                  setState(() => loading = true);
                   try {
-                    setState(() => loading = true);
+                    var user = userController.text.trim();
+                    if (widget.userFieldType == _UserFieldType.username) {
+                      user +=
+                          'ghost@emsprotocolsapp.com'; // Some arbitrary but constant domain for managed accounts
+                    }
+                    final pass = passController.text;
+
                     await FirebaseAuth.instance.signInWithEmailAndPassword(
-                        email: emailController.text,
-                        password: passController.text);
+                        email: user, password: pass);
                   } catch (e) {
                     final exc = e as FirebaseAuthException;
                     switch (exc.code) {
                       case 'invalid-email':
-                        errorMessage = "Invalid email address";
+                        errorMessage =
+                            (widget.userFieldType == _UserFieldType.email)
+                                ? "Invalid email address"
+                                : "Invalid username";
                         break;
                       case 'user-disabled':
                         errorMessage = "Your account has been disabled";
@@ -112,7 +164,7 @@ class _SigninPageState extends State<SigninPage> {
                         break;
                       default:
                         throw ErrorDescription(
-                            'Unexpected FirebaseAuthException code');
+                            'Unhandled FirebaseAuthException code');
                     }
                     setState(() => loading = false);
                   }
