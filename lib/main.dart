@@ -1,9 +1,6 @@
-import 'package:ems_protocols/home.dart';
 import 'package:ems_protocols/login.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutterfire_ui/auth.dart';
 import 'firebase_options.dart';
 
 Future<void> main() async {
@@ -12,9 +9,6 @@ Future<void> main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  FlutterFireUIAuth.configureProviders([
-    const EmailProviderConfiguration(),
-  ]);
 
   runApp(const MyApp());
 }
