@@ -2,6 +2,7 @@ import 'package:ems_protocols/home.dart';
 import 'package:ems_protocols/login.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutterfire_ui/auth.dart';
 import 'firebase_options.dart';
 
@@ -18,14 +19,9 @@ Future<void> main() async {
   runApp(const MyApp());
 }
 
-class Account {
-  Account(
-      {required this.email,
-      required this.name,
-      required this.bookmarkedEntryNames});
+class UserData {
+  UserData({required this.bookmarkedEntryNames});
 
-  String email;
-  String name;
   List<String> bookmarkedEntryNames;
 }
 
@@ -37,7 +33,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  Account? userAccount;
+  UserData? userAccount;
 
   @override
   void initState() {

@@ -8,7 +8,7 @@ class BookmarksPage extends StatelessWidget {
       : super(key: key);
 
   final ProtocolCollection collection;
-  final Account userAccount;
+  final UserData userAccount;
 
   @override
   Widget build(BuildContext context) {

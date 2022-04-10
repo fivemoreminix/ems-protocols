@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutterfire_ui/auth.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 import 'main.dart';
 
@@ -26,24 +26,25 @@ Widget _buildYesNoDialog(BuildContext context, String title, String question) {
 }
 
 class ProfilePage extends StatelessWidget {
-  ProfilePage({Key? key, required this.userAccount}) : super(key: key);
+  const ProfilePage({Key? key, required this.userAccount}) : super(key: key);
 
-  final Account userAccount;
+  final UserData userAccount;
 
   @override
   Widget build(BuildContext context) {
+    User user = FirebaseAuth.instance.currentUser!;
+
     return Center(
         child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                const ProfileScreen(
-                  providerConfigs: [EmailProviderConfiguration()],
-                ),
-                Text("Hello, ${userAccount.name}",
+                if (user.photoURL != null)
+                  Image(image: NetworkImage(user.photoURL!)),
+                Text("Hello, ${user.displayName}",
                     style: Theme.of(context).textTheme.headline4),
-                Text(userAccount.email),
+                if (user.email != null) Text(user.email!),
                 TextButton(
                   child: const Text("Sign out"),
                   style: TextButton.styleFrom(
@@ -55,13 +56,8 @@ class ProfilePage extends StatelessWidget {
                             context,
                             "Sign out?",
                             "Are you sure you want to sign out of your account? This will take you back to the login page."));
-                    switch (await result) {
-                      case true:
-                        break;
-                      case false:
-                        break;
-                      default:
-                        throw ErrorDescription("Result was not boolean");
+                    if (await result) {
+                      await FirebaseAuth.instance.signOut();
                     }
                   },
                 )

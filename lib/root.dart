@@ -8,7 +8,7 @@ import 'protocols_menu.dart';
 class RootPage extends StatefulWidget {
   RootPage({Key? key, required this.userAccount}) : super(key: key);
 
-  Account userAccount;
+  UserData userAccount;
 
   @override
   State<RootPage> createState() => _RootPageState();

@@ -118,7 +118,7 @@ class ProtocolsMenu extends StatefulWidget {
 
   final ProtocolCollection collection;
   bool searchable = false;
-  final Account userAccount;
+  final UserData userAccount;
 
   @override
   State<ProtocolsMenu> createState() => _ProtocolsMenuState();
@@ -180,7 +180,7 @@ class ProtocolsSearchPage extends StatefulWidget {
       : super(key: key);
 
   final ProtocolCollection searchableCollection;
-  final Account userAccount;
+  final UserData userAccount;
 
   @override
   State<ProtocolsSearchPage> createState() => _ProtocolsSearchPageState();
