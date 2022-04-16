@@ -34,15 +34,18 @@ class _SigninPageState extends State<SigninPage> {
 
   @override
   Widget build(BuildContext context) {
-    return GenericSignin(
-      onSwitchForms: () {
-        setState(() => showAdminForm = !showAdminForm);
-      },
-      subtitleText: showAdminForm ? 'For admins and owners' : 'For employees',
-      switchFormsText:
-          showAdminForm ? 'Go to employee login' : 'Go to owner login',
-      userFieldType:
-          showAdminForm ? _UserFieldType.email : _UserFieldType.username,
+    return Scaffold(
+      appBar: AppBar(title: const Text('Sign in')),
+      body: GenericSignin(
+        onSwitchForms: () {
+          setState(() => showAdminForm = !showAdminForm);
+        },
+        subtitleText: showAdminForm ? 'For admins and owners' : 'For users',
+        switchFormsText:
+            showAdminForm ? 'Go to user login' : 'Go to owner login',
+        userFieldType:
+            showAdminForm ? _UserFieldType.email : _UserFieldType.username,
+      )
     );
   }
 }
