@@ -33,15 +33,6 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
 
-    // TODO: read from local database or settings about account info
-    // TODO: connect to firebase and auth with existing credentials
-    // TODO: send user to login page without credentials
-
-    // If user has an account, send them to RootPage or (/home)
-    // If user does not have an account, send them to HomePage or (/) to explain product
-    //   and offer the user to log into an existing account or offer options for
-    //   companies.
-
     // userAccount = Account(
     //     email: 'thelukaswils@gmail.com',
     //     name: 'Luke',
