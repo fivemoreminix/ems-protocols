@@ -1,4 +1,5 @@
 import 'package:ems_protocols/root.dart';
+import 'package:ems_protocols/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -35,18 +36,17 @@ class _SigninPageState extends State<SigninPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Sign in')),
-      body: GenericSignin(
-        onSwitchForms: () {
-          setState(() => showAdminForm = !showAdminForm);
-        },
-        subtitleText: showAdminForm ? 'For admins and owners' : 'For users',
-        switchFormsText:
-            showAdminForm ? 'Go to user login' : 'Go to owner login',
-        userFieldType:
-            showAdminForm ? _UserFieldType.email : _UserFieldType.username,
-      )
-    );
+        appBar: AppBar(title: const Text('Sign in')),
+        body: GenericSignin(
+          onSwitchForms: () {
+            setState(() => showAdminForm = !showAdminForm);
+          },
+          subtitleText: showAdminForm ? 'For admins and owners' : 'For users',
+          switchFormsText:
+              showAdminForm ? 'Go to user login' : 'Go to owner login',
+          userFieldType:
+              showAdminForm ? _UserFieldType.email : _UserFieldType.username,
+        ));
   }
 }
 
@@ -139,7 +139,7 @@ class _GenericSigninState extends State<GenericSignin> {
                     var user = userController.text.trim();
                     if (widget.userFieldType == _UserFieldType.username) {
                       user +=
-                          'ghost@emsprotocolsapp.com'; // Some arbitrary but constant domain for managed accounts
+                          usernameEmailSuffix; // Some arbitrary but constant domain for managed accounts
                     }
                     final pass = passController.text;
 
