@@ -2,7 +2,7 @@ import 'package:ems_protocols/main.dart';
 import 'package:flutter/material.dart';
 
 import 'bookmarks.dart';
-import 'profile.dart';
+import 'settings.dart';
 import 'protocols_menu.dart';
 
 class RootPage extends StatefulWidget {
@@ -41,7 +41,7 @@ class _RootPageState extends State<RootPage> {
             collection: protocol,
             searchable: true),
         BookmarksPage(userAccount: widget.userAccount, collection: protocol),
-        ProfilePage(userAccount: widget.userAccount),
+        SettingsPage(userAccount: widget.userAccount),
       ][currentIndex],
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: currentIndex,
@@ -58,8 +58,8 @@ class _RootPageState extends State<RootPage> {
             icon: Icon(Icons.bookmark),
           ),
           BottomNavigationBarItem(
-            label: 'Account',
-            icon: Icon(Icons.account_circle),
+            label: 'Settings',
+            icon: Icon(Icons.settings),
           ),
         ],
       ),

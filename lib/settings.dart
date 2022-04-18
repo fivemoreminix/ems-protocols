@@ -26,8 +26,8 @@ Widget _buildYesNoDialog(BuildContext context, String title, String question) {
   );
 }
 
-class ProfilePage extends StatelessWidget {
-  const ProfilePage({Key? key, required this.userAccount}) : super(key: key);
+class SettingsPage extends StatelessWidget {
+  const SettingsPage({Key? key, required this.userAccount}) : super(key: key);
 
   final UserData userAccount;
 
@@ -36,17 +36,15 @@ class ProfilePage extends StatelessWidget {
     User user = FirebaseAuth.instance.currentUser!;
 
     return Scaffold(
-        appBar: AppBar(title: const Text('Profile')),
+        appBar: AppBar(title: const Text('Settings')),
         body: Center(
             child: Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding: const EdgeInsets.all(16.0),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     if (user.photoURL != null)
                       Image(image: NetworkImage(user.photoURL!)),
-                    Text("Hello, ${user.displayName}",
-                        style: Theme.of(context).textTheme.headline4),
                     if (user.email != null) Text(user.email!),
                     TextButton(
                       child: const Text('Edit Payment and Billing Info'),
