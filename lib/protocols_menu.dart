@@ -86,7 +86,7 @@ Widget buildProtocolEntryListItem(BuildContext context,
         return (item is ProtocolItem)
             ? IconButton(
                 icon: Icon(bookmarked
-                    ? Icons.bookmark_added_outlined
+                    ? Icons.bookmark_added
                     : Icons.bookmark_add_outlined),
                 onPressed: () {
                   if (bookmarked) {

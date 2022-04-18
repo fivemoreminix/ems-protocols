@@ -1,3 +1,4 @@
+import 'package:ems_protocols/payment_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -45,6 +46,13 @@ class ProfilePage extends StatelessWidget {
                 Text("Hello, ${user.displayName}",
                     style: Theme.of(context).textTheme.headline4),
                 if (user.email != null) Text(user.email!),
+                TextButton(
+                  child: const Text('Edit payment information'),
+                  onPressed: () async {
+                    await Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => PaymentPage()));
+                  },
+                ),
                 TextButton(
                   child: const Text("Sign out"),
                   style: TextButton.styleFrom(
