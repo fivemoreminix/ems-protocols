@@ -1,6 +1,7 @@
 import 'package:ems_protocols/payment_screen.dart';
 import 'package:ems_protocols/root.dart';
 import 'package:ems_protocols/utils.dart';
+import 'package:ems_protocols/welcome.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -15,7 +16,7 @@ class AuthGate extends StatelessWidget {
       stream: FirebaseAuth.instance.authStateChanges(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
-          return const SigninPage();
+          return const WelcomePage();
         }
 
         return RootPage(userAccount: UserData(bookmarkedEntryNames: []));
