@@ -134,8 +134,9 @@ class _GenericSigninState extends State<GenericSignin> {
                           .bodyMedium
                           ?.copyWith(color: Colors.red),
                     ),
+                  const SizedBox(height: 8.0),
                   Center(
-                      child: TextButton(
+                      child: ElevatedButton(
                     child: const Text('Sign in'),
                     onPressed: () async {
                       setState(() => loading = true);
@@ -176,6 +177,10 @@ class _GenericSigninState extends State<GenericSignin> {
                       }
                     },
                   )),
+                  TextButton(
+                    child: const Text('Create an account'),
+                    onPressed: () {}, // TODO: create an account handler
+                  )
                 ],
               ))),
       if (loading) const Center(child: CircularProgressIndicator()),
