@@ -69,7 +69,7 @@ class _PaymentPageState extends State<PaymentPage> {
               'Payment info is always processed securely with Stripe.',
               style: Theme.of(context).textTheme.bodySmall,
             ),
-            TextButton(
+            ElevatedButton(
               child: const Text('Save'),
               onPressed: () {},
             )

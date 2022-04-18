@@ -57,10 +57,10 @@ class ProfilePage extends StatelessWidget {
                                 builder: (context) => PaymentPage()));
                       },
                     ),
-                    TextButton(
+                    ElevatedButton(
                       child: const Text("Sign out"),
                       style: TextButton.styleFrom(
-                        primary: Theme.of(context).colorScheme.error,
+                        backgroundColor: Theme.of(context).colorScheme.error,
                       ),
                       onPressed: () async {
                         var result = await showDialog(
