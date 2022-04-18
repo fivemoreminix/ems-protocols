@@ -38,8 +38,7 @@ class _SigninPageState extends State<SigninPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(title: const Text('Sign in')),
-        body: SingleChildScrollView(
-            child: GenericSignin(
+        body: GenericSignin(
           onSwitchForms: () {
             setState(() => showAdminForm = !showAdminForm);
           },
@@ -48,7 +47,7 @@ class _SigninPageState extends State<SigninPage> {
               showAdminForm ? 'Go to user login' : 'Go to owner login',
           userFieldType:
               showAdminForm ? _UserFieldType.email : _UserFieldType.username,
-        )));
+        ));
   }
 }
 
@@ -85,97 +84,100 @@ class _GenericSigninState extends State<GenericSignin> {
   Widget build(BuildContext context) {
     return Scaffold(
         body: Stack(children: [
-      Padding(
-          padding: const EdgeInsets.all(40.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Center(
-                  child: Text('EMS Protocols',
-                      style: Theme.of(context).textTheme.headline2)),
-              const SizedBox(height: 32.0),
-              Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                Text(
-                  'Sign in',
-                  style: Theme.of(context).textTheme.headline4,
-                ),
-                const Spacer(),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
+      SingleChildScrollView(
+          child: Padding(
+              padding: const EdgeInsets.all(40.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Center(
+                      child: Text('EMS Protocols',
+                          style: Theme.of(context).textTheme.headline2)),
+                  const SizedBox(height: 32.0),
+                  Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
                     Text(
-                      widget.subtitleText,
-                      style: Theme.of(context).textTheme.subtitle1,
+                      'Sign in',
+                      style: Theme.of(context).textTheme.headline4,
                     ),
-                    TextButton(
-                      child: Text(widget.switchFormsText),
-                      onPressed: widget.onSwitchForms,
+                    const Spacer(),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text(
+                          widget.subtitleText,
+                          style: Theme.of(context).textTheme.subtitle1,
+                        ),
+                        TextButton(
+                          child: Text(widget.switchFormsText),
+                          onPressed: widget.onSwitchForms,
+                        ),
+                      ],
+                    )
+                  ]),
+                  TextFormField(
+                      controller: userController,
+                      decoration: InputDecoration(
+                          hintText:
+                              (widget.userFieldType == _UserFieldType.email)
+                                  ? 'email address'
+                                  : 'username')),
+                  TextFormField(
+                    controller: passController,
+                    decoration: const InputDecoration(hintText: 'password'),
+                    obscureText: true,
+                  ),
+                  if (errorMessage != null)
+                    Text(
+                      errorMessage!,
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyMedium
+                          ?.copyWith(color: Colors.red),
                     ),
-                  ],
-                )
-              ]),
-              TextFormField(
-                  controller: userController,
-                  decoration: InputDecoration(
-                      hintText: (widget.userFieldType == _UserFieldType.email)
-                          ? 'email address'
-                          : 'username')),
-              TextFormField(
-                controller: passController,
-                decoration: const InputDecoration(hintText: 'password'),
-              ),
-              if (errorMessage != null)
-                Text(
-                  errorMessage!,
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodyMedium
-                      ?.copyWith(color: Colors.red),
-                ),
-              Center(
-                  child: TextButton(
-                child: const Text('Sign in'),
-                onPressed: () async {
-                  setState(() => loading = true);
-                  try {
-                    var user = userController.text.trim();
-                    if (widget.userFieldType == _UserFieldType.username) {
-                      user +=
-                          usernameEmailSuffix; // Some arbitrary but constant domain for managed accounts
-                    }
-                    final pass = passController.text;
+                  Center(
+                      child: TextButton(
+                    child: const Text('Sign in'),
+                    onPressed: () async {
+                      setState(() => loading = true);
+                      try {
+                        var user = userController.text.trim();
+                        if (widget.userFieldType == _UserFieldType.username) {
+                          user +=
+                              usernameEmailSuffix; // Some arbitrary but constant domain for managed accounts
+                        }
+                        final pass = passController.text;
 
-                    await FirebaseAuth.instance.signInWithEmailAndPassword(
-                        email: user, password: pass);
-                  } catch (e) {
-                    final exc = e as FirebaseAuthException;
-                    switch (exc.code) {
-                      case 'invalid-email':
-                        errorMessage =
-                            (widget.userFieldType == _UserFieldType.email)
-                                ? "Invalid email address"
-                                : "Invalid username";
-                        break;
-                      case 'user-disabled':
-                        errorMessage = "Your account has been disabled";
-                        break;
-                      case 'user-not-found':
-                        errorMessage = "Your account cannot be found.";
-                        break;
-                      case 'wrong-password':
-                        errorMessage =
-                            "That password is not correct for your account.";
-                        break;
-                      default:
-                        throw ErrorDescription(
-                            'Unhandled FirebaseAuthException code');
-                    }
-                    setState(() => loading = false);
-                  }
-                },
-              )),
-            ],
-          )),
+                        await FirebaseAuth.instance.signInWithEmailAndPassword(
+                            email: user, password: pass);
+                      } catch (e) {
+                        final exc = e as FirebaseAuthException;
+                        switch (exc.code) {
+                          case 'invalid-email':
+                            errorMessage =
+                                (widget.userFieldType == _UserFieldType.email)
+                                    ? "Invalid email address"
+                                    : "Invalid username";
+                            break;
+                          case 'user-disabled':
+                            errorMessage = "Your account has been disabled";
+                            break;
+                          case 'user-not-found':
+                            errorMessage = "Your account cannot be found.";
+                            break;
+                          case 'wrong-password':
+                            errorMessage =
+                                "That password is not correct for your account.";
+                            break;
+                          default:
+                            throw ErrorDescription(
+                                'Unhandled FirebaseAuthException code');
+                        }
+                        setState(() => loading = false);
+                      }
+                    },
+                  )),
+                ],
+              ))),
       if (loading) const Center(child: CircularProgressIndicator()),
     ]));
   }
