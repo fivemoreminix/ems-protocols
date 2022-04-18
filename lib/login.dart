@@ -1,3 +1,4 @@
+import 'package:ems_protocols/payment_screen.dart';
 import 'package:ems_protocols/root.dart';
 import 'package:ems_protocols/utils.dart';
 import 'package:flutter/material.dart';
@@ -37,7 +38,8 @@ class _SigninPageState extends State<SigninPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(title: const Text('Sign in')),
-        body: GenericSignin(
+        body: SingleChildScrollView(
+            child: GenericSignin(
           onSwitchForms: () {
             setState(() => showAdminForm = !showAdminForm);
           },
@@ -46,7 +48,7 @@ class _SigninPageState extends State<SigninPage> {
               showAdminForm ? 'Go to user login' : 'Go to owner login',
           userFieldType:
               showAdminForm ? _UserFieldType.email : _UserFieldType.username,
-        ));
+        )));
   }
 }
 

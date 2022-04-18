@@ -49,17 +49,27 @@ class ProfilePage extends StatelessWidget {
                         style: Theme.of(context).textTheme.headline4),
                     if (user.email != null) Text(user.email!),
                     TextButton(
+                      child: const Text('Edit Payment and Billing Info'),
+                      onPressed: () async {
+                        await Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => PaymentPage()));
+                      },
+                    ),
+                    TextButton(
                       child: const Text("Sign out"),
                       style: TextButton.styleFrom(
-                          primary: Theme.of(context).colorScheme.error),
+                        primary: Theme.of(context).colorScheme.error,
+                      ),
                       onPressed: () async {
-                        var result = showDialog(
+                        var result = await showDialog(
                             context: context,
                             builder: (context) => _buildYesNoDialog(
                                 context,
                                 "Sign out?",
                                 "Are you sure you want to sign out of your account? This will take you back to the login page."));
-                        if (await result) {
+                        if (result != null && result) {
                           await FirebaseAuth.instance.signOut();
                         }
                       },
