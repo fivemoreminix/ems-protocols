@@ -50,7 +50,10 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       title: 'EMS Protocols',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(primarySwatch: Colors.indigo),
+      theme: ThemeData(
+        primarySwatch: Colors.indigo,
+        visualDensity: VisualDensity.adaptivePlatformDensity,
+      ),
       routes: {
         '/': (context) {
           return const AuthGate();
