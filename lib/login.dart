@@ -7,6 +7,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 import 'main.dart';
 
+/// AuthGate checks if a user is signed into Firebase before allowing them to
+/// access content in the app. A user not signed in will be directed to a sign-in
+/// page.
 class AuthGate extends StatelessWidget {
   const AuthGate({Key? key}) : super(key: key);
 
@@ -16,9 +19,11 @@ class AuthGate extends StatelessWidget {
       stream: FirebaseAuth.instance.authStateChanges(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
-          return const WelcomePage();
+          return const WelcomePage(); // Welcome page will lead to the sign in page.
         }
 
+        // Here I'm creating a new UserData with no data, because I have yet to
+        // hook up user accounts to stored data in Firebase yet.
         return RootPage(userAccount: UserData(bookmarkedEntryNames: []));
       },
     );
@@ -40,6 +45,8 @@ class _SigninPageState extends State<SigninPage> {
     return Scaffold(
         appBar: AppBar(title: const Text('Sign in')),
         body: GenericSignin(
+          // I use this generic sign in form to present one for admin accounts
+          // and another for users.
           onSwitchForms: () {
             setState(() => showAdminForm = !showAdminForm);
           },

@@ -5,6 +5,8 @@ import 'bookmarks.dart';
 import 'settings.dart';
 import 'protocols_menu.dart';
 
+/// The RootPage is the underlying navigator containing the BottomNavigationBar
+/// entries for Protocols, Bookmarks, and Settings.
 class RootPage extends StatefulWidget {
   RootPage({Key? key, required this.userAccount}) : super(key: key);
 
@@ -23,7 +25,7 @@ class _RootPageState extends State<RootPage> {
   void initState() {
     super.initState();
 
-    loadProtocolsJson().then((value) {
+    loadProtocols().then((value) {
       if (value == null) {
         throw ErrorDescription('Protocols is not a ProtocolCollection');
       } else {

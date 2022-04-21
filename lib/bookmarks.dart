@@ -21,9 +21,11 @@ class BookmarksPage extends StatelessWidget {
               var item = collection.getItemByTitle(bookmarkTitle);
               // TODO: if item is null, remove entry from account
               if (item != null) {
+                // TODO: replace this with buildProtocolEntryListItem.
                 return ListTile(
                   title: Text(item.title),
-                  onTap: () {}, // TODO: handle tapping bookmark items
+                  onTap:
+                      () {}, // TODO: handle tapping bookmark items (fixed by above)
                   trailing: IconButton(
                     icon: const Icon(Icons.bookmark_remove),
                     onPressed: () {},

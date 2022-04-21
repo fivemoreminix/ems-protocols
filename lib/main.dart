@@ -64,6 +64,7 @@ class _MyAppState extends State<MyApp> {
 }
 
 // payment_screen.dart
+/// NOTE: this is not meant to be included in the app, just kept as an example.
 class PaymentScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {

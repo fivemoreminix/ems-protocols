@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 
+/// PaymentPage is a fullscreen view of billing and payment information for
+/// owner accounts. Will allow them to modify payment data and it should update
+/// in their account data for billing and stripe for payment method.
 class PaymentPage extends StatefulWidget {
   PaymentPage({Key? key}) : super(key: key);
 
@@ -71,7 +74,7 @@ class _PaymentPageState extends State<PaymentPage> {
             ),
             ElevatedButton(
               child: const Text('Save'),
-              onPressed: () {},
+              onPressed: () {}, // TODO: save payment and billing information.
             )
           ]),
         )));

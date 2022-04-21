@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+/// A ProtocolEntry is the base class for ProtocolCollection and ProtocolItem
+/// for OOP to represent the protocols in code.
 class ProtocolEntry {
   ProtocolEntry(this.title);
 
@@ -17,6 +19,9 @@ class ProtocolCollection extends ProtocolEntry {
 
   List<ProtocolEntry> items;
 
+  /// walkItems runs the provided func against every ProtocolItem in the collection,
+  /// and every subcollection. walkItems exits when all items have been visited
+  /// or func returns true.
   void walkItems(bool Function(ProtocolItem) func) {
     for (var entry in items) {
       if (entry is ProtocolItem) {
@@ -27,6 +32,9 @@ class ProtocolCollection extends ProtocolEntry {
     }
   }
 
+  /// getItemByTitle visits every item in the collection and subcollections
+  /// recursively until the first item with the same title is found, otherwise
+  /// a null item is returned.
   ProtocolItem? getItemByTitle(String title) {
     ProtocolItem? found;
     walkItems((item) {
@@ -40,12 +48,16 @@ class ProtocolCollection extends ProtocolEntry {
   }
 }
 
+/// A ProtocolItem is to a ProtocolCollection as a leaf is to a tree. These
+/// ProtocolItems contain file or web URIs to documents or images.
 class ProtocolItem extends ProtocolEntry {
   ProtocolItem({required String title, this.documentUri}) : super(title);
 
   Uri? documentUri;
 }
 
+/// parseProtocolCollectionJson reads a tree of JSON and compiles it into a
+/// ProtocolCollection of ProtocolItems and sub-ProtocolCollections.
 ProtocolCollection? parseProtocolCollectionJson(Map<String, dynamic> json) {
   var collection = ProtocolCollection(title: 'Protocols', items: []);
   for (var entry in json.entries) {
@@ -67,11 +79,16 @@ ProtocolCollection? parseProtocolCollectionJson(Map<String, dynamic> json) {
   return collection;
 }
 
-Future<ProtocolCollection?> loadProtocolsJson() async {
+/// loadProtocols is a helper function to load the protocols.json, decode it,
+/// and then build a ProtocolCollection from it, which is returned as a Future.
+Future<ProtocolCollection?> loadProtocols() async {
   var json = await rootBundle.loadString('assets/protocols.json');
   return parseProtocolCollectionJson(jsonDecode(json));
 }
 
+/// buildProtocolEntryListItem is a helper function for building the items in
+/// protocol entry lists, where there is a protocol entry name and a bookmark
+/// button.
 Widget buildProtocolEntryListItem(BuildContext context,
     {required ProtocolEntry item,
     required List<String> bookmarkedEntryNames,
@@ -130,7 +147,7 @@ class _ProtocolsMenuState extends State<ProtocolsMenu> {
     return Scaffold(
         appBar: AppBar(
           title: Text(widget.collection.title),
-          actions: widget.searchable
+          actions: widget.searchable // Search page feature
               ? [
                   IconButton(
                     icon: const Icon(Icons.search),
@@ -174,6 +191,7 @@ class _ProtocolsMenuState extends State<ProtocolsMenu> {
   }
 }
 
+/// The ProtocolsSearchPage is a fullscreen page for searching protocols by name.
 class ProtocolsSearchPage extends StatefulWidget {
   const ProtocolsSearchPage(
       {Key? key, required this.searchableCollection, required this.userAccount})

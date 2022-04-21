@@ -2,6 +2,10 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:ems_protocols/login.dart';
 import 'package:flutter/material.dart';
 
+/// The WelcomePage is where new users and potential buyers are introduced to the
+/// application and its features. We try to sell them on the app here before
+/// they reach the sign in page where they must be willing to pay $200/mo to
+/// access the content in the app.
 class WelcomePage extends StatelessWidget {
   const WelcomePage({Key? key}) : super(key: key);
 
@@ -33,7 +37,9 @@ class WelcomePage extends StatelessWidget {
                                 },
                                 child: const Text('Sign in')),
                             ElevatedButton(
-                                onPressed: () {}, child: const Text('Register'))
+                                onPressed:
+                                    () {}, // TODO: handle register onPressed()
+                                child: const Text('Register'))
                           ],
                         ),
                       ),
@@ -54,9 +60,12 @@ class WelcomePage extends StatelessWidget {
                               const EdgeInsets.only(top: 16.0, bottom: 16.0),
                           child: CarouselSlider(
                               items: [
-                                Image(image: AssetImage('images/one.jpg')),
-                                Image(image: AssetImage('images/two.jpg')),
-                                Image(image: AssetImage('images/three.jpg'))
+                                const Image(
+                                    image: AssetImage('images/one.jpg')),
+                                const Image(
+                                    image: AssetImage('images/two.jpg')),
+                                const Image(
+                                    image: AssetImage('images/three.jpg'))
                               ]
                                   .map((img) => Padding(
                                         padding: const EdgeInsets.all(8.0),
