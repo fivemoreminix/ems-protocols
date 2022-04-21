@@ -1,6 +1,6 @@
 # EMS Protocols
 
-Use [issues](/issues) for bug tracking, features, and general development updates. We can include discussions and cross reference other issues. Issues can also be tracked in milestones.
+Use [issues](https://github.com/fivemoreminix/ems-protocols/issues) for bug tracking, features, and general development updates. We can include discussions and cross reference other issues. Issues can also be tracked in milestones.
 
 ## Technologies in use
  * Firebase for user authentication and user data storage (database)
