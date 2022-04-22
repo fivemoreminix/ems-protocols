@@ -19,13 +19,13 @@ class RootPage extends StatefulWidget {
 class _RootPageState extends State<RootPage> {
   int currentIndex = 0;
 
-  ProtocolCollection protocol = ProtocolCollection(title: '', items: []);
+  ProtocolCollection protocol = ProtocolCollection('', '', []);
 
   @override
   void initState() {
     super.initState();
 
-    loadProtocols().then((value) {
+    loadProtocol('assets/Northwest AR Regional Protocols 2018').then((value) {
       if (value == null) {
         throw ErrorDescription('Protocols is not a ProtocolCollection');
       } else {

@@ -19,7 +19,7 @@ class AuthGate extends StatelessWidget {
       stream: FirebaseAuth.instance.authStateChanges(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
-          return const WelcomePage(); // Welcome page will lead to the sign in page.
+          return const SigninPage(); // Welcome page will lead to the sign in page.
         }
 
         // Here I'm creating a new UserData with no data, because I have yet to

@@ -8,14 +8,15 @@ import 'package:url_launcher/url_launcher.dart';
 /// A ProtocolEntry is the base class for ProtocolCollection and ProtocolItem
 /// for OOP to represent the protocols in code.
 class ProtocolEntry {
-  ProtocolEntry(this.title);
+  ProtocolEntry(this.title, this.path);
 
   String title;
+  String path;
 }
 
 class ProtocolCollection extends ProtocolEntry {
-  ProtocolCollection({required String title, required this.items})
-      : super(title);
+  ProtocolCollection(String title, String path, this.items)
+      : super(title, path);
 
   List<ProtocolEntry> items;
 
@@ -49,28 +50,29 @@ class ProtocolCollection extends ProtocolEntry {
 }
 
 /// A ProtocolItem is to a ProtocolCollection as a leaf is to a tree. These
-/// ProtocolItems contain file or web URIs to documents or images.
+/// ProtocolItems contain a file path to a document or image in the assets.
 class ProtocolItem extends ProtocolEntry {
-  ProtocolItem({required String title, this.documentUri}) : super(title);
-
-  Uri? documentUri;
+  ProtocolItem(String title, String path) : super(title, path);
 }
 
 /// parseProtocolCollectionJson reads a tree of JSON and compiles it into a
 /// ProtocolCollection of ProtocolItems and sub-ProtocolCollections.
-ProtocolCollection? parseProtocolCollectionJson(Map<String, dynamic> json) {
-  var collection = ProtocolCollection(title: 'Protocols', items: []);
+ProtocolCollection? parseProtocolCollectionJson(
+    Map<String, dynamic> json, String collectionPath) {
+  var collection = ProtocolCollection('Protocols', collectionPath, []);
   for (var entry in json.entries) {
     if (entry.value is Map) {
-      var c = parseProtocolCollectionJson(entry.value);
+      var c = parseProtocolCollectionJson(entry.value, collectionPath);
       if (c == null) {
         throw ErrorDescription('Protocol collection is empty');
       }
       c.title = entry.key;
       collection.items.add(c);
     } else if (entry.value is String) {
-      collection.items.add(
-          ProtocolItem(title: entry.key, documentUri: Uri.parse(entry.value)));
+      collection.items.add(ProtocolItem(
+          entry.key,
+          // Make all values relative to the folder containing protocols.json
+          collectionPath + "/" + entry.value));
     } else {
       throw ErrorDescription(
           'Value of type ${entry.value.runtimeType} in Protocol JSON is not a Map or String');
@@ -79,11 +81,13 @@ ProtocolCollection? parseProtocolCollectionJson(Map<String, dynamic> json) {
   return collection;
 }
 
-/// loadProtocols is a helper function to load the protocols.json, decode it,
+/// loadProtocols is a helper function to load the given protocol, decode it,
 /// and then build a ProtocolCollection from it, which is returned as a Future.
-Future<ProtocolCollection?> loadProtocols() async {
-  var json = await rootBundle.loadString('assets/protocols.json');
-  return parseProtocolCollectionJson(jsonDecode(json));
+///
+/// Example: loadProtocols("assets/Northwest AR Regional Protocols 2018")
+Future<ProtocolCollection?> loadProtocol(String protocol) async {
+  var json = await rootBundle.loadString(protocol + '/protocols.json');
+  return parseProtocolCollectionJson(jsonDecode(json), protocol);
 }
 
 /// buildProtocolEntryListItem is a helper function for building the items in
@@ -181,7 +185,7 @@ class _ProtocolsMenuState extends State<ProtocolsMenu> {
                               userAccount: widget.userAccount,
                               searchable: false)));
                 } else if (item is ProtocolItem) {
-                  launch(item.documentUri.toString());
+                  launch(item.path);
                 } else {
                   throw ErrorDescription(
                       'item must be either ProtocolCollection or ProtocolItem, is ${item.runtimeType} instead');
