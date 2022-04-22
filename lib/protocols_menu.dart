@@ -1,9 +1,10 @@
 import 'dart:convert';
 
 import 'package:ems_protocols/main.dart';
+import 'package:ems_protocols/pdf_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:pdfx/pdfx.dart';
 
 /// A ProtocolEntry is the base class for ProtocolCollection and ProtocolItem
 /// for OOP to represent the protocols in code.
@@ -130,14 +131,15 @@ Widget buildProtocolEntryListItem(BuildContext context,
 }
 
 class ProtocolsMenu extends StatefulWidget {
-  ProtocolsMenu(
+  ProtocolsMenu(this.collection,
       {Key? key,
-      required this.collection,
+      this.rootCollection,
       required this.userAccount,
       required this.searchable})
       : super(key: key);
 
   final ProtocolCollection collection;
+  final ProtocolCollection? rootCollection;
   bool searchable = false;
   final UserData userAccount;
 
@@ -180,12 +182,18 @@ class _ProtocolsMenuState extends State<ProtocolsMenu> {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => ProtocolsMenu(
-                              collection: item,
+                          builder: (context) => ProtocolsMenu(item,
+                              rootCollection: widget.collection,
                               userAccount: widget.userAccount,
                               searchable: false)));
                 } else if (item is ProtocolItem) {
-                  launch(item.path);
+                  print('Opening ${item.path} in PDF viewer');
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => PdfScreen(PdfControllerPinch(
+                            document: PdfDocument.openAsset(item.path)))),
+                  );
                 } else {
                   throw ErrorDescription(
                       'item must be either ProtocolCollection or ProtocolItem, is ${item.runtimeType} instead');

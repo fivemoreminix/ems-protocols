@@ -3,11 +3,11 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   test('Get item by title', () {
-    ProtocolCollection collection = ProtocolCollection(title: '', items: [
-      ProtocolItem(title: 'Entry 1'),
-      ProtocolCollection(title: '', items: [
-        ProtocolItem(title: 'Entry 2'),
-        ProtocolItem(title: 'Entry 3'),
+    ProtocolCollection collection = ProtocolCollection('', '', [
+      ProtocolItem('Entry 1', ''),
+      ProtocolCollection('', '', [
+        ProtocolItem('Entry 2', ''),
+        ProtocolItem('Entry 3', ''),
       ])
     ]);
 

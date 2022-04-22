@@ -39,9 +39,10 @@ class _RootPageState extends State<RootPage> {
     return Scaffold(
       body: <Widget>[
         ProtocolsMenu(
-            userAccount: widget.userAccount,
-            collection: protocol,
-            searchable: true),
+          protocol,
+          userAccount: widget.userAccount,
+          searchable: true,
+        ),
         BookmarksPage(userAccount: widget.userAccount, collection: protocol),
         SettingsPage(userAccount: widget.userAccount),
       ][currentIndex],

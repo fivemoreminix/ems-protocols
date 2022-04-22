@@ -1,0 +1,40 @@
+{
+    "Introductory Statement": "Introductory Statement.pdf",
+    "2018 Revision Participants": "2018 Revision Participants.pdf",
+    "Department Medical Directors": "Department Medical Directors.pdf",
+    "Participating Agencies": "Participating Agencies.pdf",
+    "General Protocols": {
+        "Universal Patient Care": "Protocols/General Protocols/Universal Patient Care.pdf"
+    },
+    "Cardiac / Resuscitation": {
+        "Subsection 1.1": {
+            "Item 1": "uri",
+            "Item 2": "uri"
+        },
+        "Subsection 1.2": {
+            "Item 1": "uri",
+            "Item 2": "uri"
+        }
+    },
+    "Medical": {
+
+    },
+    "Obstetrics": {
+
+    },
+    "Pediatric": {
+
+    },
+    "Respiratory": {
+
+    },
+    "Trauma": {
+
+    },
+    "Medications": {
+
+    },
+    "Guides": {
+
+    }
+}

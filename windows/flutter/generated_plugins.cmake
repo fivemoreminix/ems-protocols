@@ -3,7 +3,7 @@
 #
 
 list(APPEND FLUTTER_PLUGIN_LIST
-  url_launcher_windows
+  pdfx
 )
 
 set(PLUGIN_BUNDLED_LIBRARIES)

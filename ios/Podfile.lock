@@ -3,6 +3,8 @@ PODS:
     - Firebase/Functions (= 8.14.0)
     - firebase_core
     - Flutter
+  - device_info_plus (0.0.1):
+    - Flutter
   - Firebase/Auth (8.14.0):
     - Firebase/CoreOnly
     - FirebaseAuth (~> 8.14.0)
@@ -95,6 +97,8 @@ PODS:
     - nanopb/encode (= 2.30908.0)
   - nanopb/decode (2.30908.0)
   - nanopb/encode (2.30908.0)
+  - pdfx (1.0.0):
+    - Flutter
   - PromisesObjC (2.1.0)
   - Stripe (21.12.0):
     - Stripe/Stripe3DS2 (= 21.12.0)
@@ -113,18 +117,17 @@ PODS:
   - StripeCore (21.12.0)
   - StripeUICore (21.12.0):
     - StripeCore (= 21.12.0)
-  - url_launcher_ios (0.0.1):
-    - Flutter
 
 DEPENDENCIES:
   - cloud_functions (from `.symlinks/plugins/cloud_functions/ios`)
+  - device_info_plus (from `.symlinks/plugins/device_info_plus/ios`)
   - firebase_auth (from `.symlinks/plugins/firebase_auth/ios`)
   - firebase_core (from `.symlinks/plugins/firebase_core/ios`)
   - firebase_database (from `.symlinks/plugins/firebase_database/ios`)
   - firebase_messaging (from `.symlinks/plugins/firebase_messaging/ios`)
   - Flutter (from `Flutter`)
+  - pdfx (from `.symlinks/plugins/pdfx/ios`)
   - stripe_ios (from `.symlinks/plugins/stripe_ios/ios`)
-  - url_launcher_ios (from `.symlinks/plugins/url_launcher_ios/ios`)
 
 SPEC REPOS:
   trunk:
@@ -150,6 +153,8 @@ SPEC REPOS:
 EXTERNAL SOURCES:
   cloud_functions:
     :path: ".symlinks/plugins/cloud_functions/ios"
+  device_info_plus:
+    :path: ".symlinks/plugins/device_info_plus/ios"
   firebase_auth:
     :path: ".symlinks/plugins/firebase_auth/ios"
   firebase_core:
@@ -160,13 +165,14 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/firebase_messaging/ios"
   Flutter:
     :path: Flutter
+  pdfx:
+    :path: ".symlinks/plugins/pdfx/ios"
   stripe_ios:
     :path: ".symlinks/plugins/stripe_ios/ios"
-  url_launcher_ios:
-    :path: ".symlinks/plugins/url_launcher_ios/ios"
 
 SPEC CHECKSUMS:
   cloud_functions: 0003e860a2af12e1a2baf9a804a681b76f5d58b5
+  device_info_plus: e5c5da33f982a436e103237c0c85f9031142abed
   Firebase: 7e8fe528c161b9271d365217a74c16aaf834578e
   firebase_auth: e720e83a58c9efe4f3b8a96b4afe2fbf84fdb28e
   firebase_core: b0b382f1497ab407aceb25e41e3036c8798c1609
@@ -185,13 +191,13 @@ SPEC CHECKSUMS:
   GTMSessionFetcher: 4577a4cc914a5a07c40a8a0ad0acc22080418c2d
   leveldb-library: 50c7b45cbd7bf543c81a468fe557a16ae3db8729
   nanopb: a0ba3315591a9ae0a16a309ee504766e90db0c96
+  pdfx: 1cf9d07304b44d47676e6c6c4e13707eff394847
   PromisesObjC: 99b6f43f9e1044bd87a95a60beff28c2c44ddb72
   Stripe: c3692f360abcdfeef9751e3c240e7efbc68b921f
   stripe_ios: bfa5113de686073731d1ebbaecc0e863a2e110b7
   StripeApplePay: 14db90fdf89abb2809ce41fc68bc6b1a86221408
   StripeCore: 5e38cdea3dc176a32d8797ef312fe1ab41571272
   StripeUICore: c28e371b385f968388ae38bedb93a2723c078442
-  url_launcher_ios: 839c58cdb4279282219f5e248c3321761ff3c4de
 
 PODFILE CHECKSUM: 7368163408c647b7eb699d0d788ba6718e18fb8d
 

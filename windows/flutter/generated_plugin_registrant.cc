@@ -6,9 +6,9 @@
 
 #include "generated_plugin_registrant.h"
 
-#include <url_launcher_windows/url_launcher_windows.h>
+#include <pdfx/pdfx_plugin.h>
 
 void RegisterPlugins(flutter::PluginRegistry* registry) {
-  UrlLauncherWindowsRegisterWithRegistrar(
-      registry->GetRegistrarForPlugin("UrlLauncherWindows"));
+  PdfxPluginRegisterWithRegistrar(
+      registry->GetRegistrarForPlugin("PdfxPlugin"));
 }
