@@ -40,10 +40,8 @@ class UserData {
     return getUserDocument().get().then((DocumentSnapshot snapshot) {
       if (snapshot.exists) {
         try {
-          List<dynamic> bookmarks = snapshot
-              .get('bookmarks');
-          return bookmarks.map((dynamic e) => e.toString())
-              .toList();
+          List<dynamic> bookmarks = snapshot.get('bookmarks');
+          return bookmarks.map((dynamic e) => e.toString()).toList();
         } on StateError catch (e) {
           return <String>[]; // No bookmarks entry
         }

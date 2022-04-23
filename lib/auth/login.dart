@@ -20,7 +20,8 @@ class AuthGate extends StatelessWidget {
         }
 
         // User must be signed into Firebase by now, to have UserData
-        return RootPage(userAccount: UserData(FirebaseAuth.instance.currentUser!));
+        return RootPage(
+            userAccount: UserData(FirebaseAuth.instance.currentUser!));
       },
     );
   }
