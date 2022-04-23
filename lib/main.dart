@@ -1,4 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ems_protocols/auth/login.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
@@ -22,10 +24,44 @@ Future<void> main() async {
   runApp(const MyApp());
 }
 
+/// UserData is the high-level wrapper over settings saved for a user, and this
+/// data is synced with the Firestore database. UserData allows safe reading and
+/// writing of synced data.
 class UserData {
-  UserData({required this.bookmarkedEntryNames});
+  UserData(this.user);
 
-  List<String> bookmarkedEntryNames;
+  late final User user;
+
+  CollectionReference getCollection() =>
+      FirebaseFirestore.instance.collection('userdata');
+  DocumentReference getUserDocument() => getCollection().doc(user.uid);
+
+  Future<List<String>> getBookmarks() async {
+    return getUserDocument().get().then((DocumentSnapshot snapshot) {
+      if (snapshot.exists) {
+        try {
+          List<dynamic> bookmarks = snapshot
+              .get('bookmarks');
+          return bookmarks.map((dynamic e) => e.toString())
+              .toList();
+        } on StateError catch (e) {
+          return <String>[]; // No bookmarks entry
+        }
+      } else {
+        return <String>[]; // No entry for user
+      }
+    }).catchError((error) {
+      print('Failed to get bookmarks: $error');
+      return <String>[];
+    });
+  }
+
+  Future<void> setBookmarks(List<String> bookmarks) async {
+    return getUserDocument()
+        .set({'bookmarks': bookmarks}, SetOptions(merge: true))
+        .then((value) => print('UserData bookmarks updated'))
+        .catchError((error) => print('UserData setBookmarks: $error'));
+  }
 }
 
 class MyApp extends StatefulWidget {
@@ -101,10 +137,10 @@ class _RootPageState extends State<RootPage> {
       body: <Widget>[
         ProtocolsMenu(
           protocol,
-          userAccount: widget.userAccount,
+          userData: widget.userAccount,
           searchable: true,
         ),
-        BookmarksPage(userAccount: widget.userAccount, collection: protocol),
+        BookmarksPage(userData: widget.userAccount, collection: protocol),
         SettingsPage(userAccount: widget.userAccount),
       ][currentIndex],
       bottomNavigationBar: BottomNavigationBar(

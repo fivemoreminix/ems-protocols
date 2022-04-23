@@ -1,4 +1,8 @@
 PODS:
+  - cloud_firestore (3.1.13):
+    - Firebase/Firestore (= 8.14.0)
+    - firebase_core
+    - Flutter
   - cloud_functions (3.2.11):
     - Firebase/Functions (= 8.14.0)
     - firebase_core
@@ -13,6 +17,9 @@ PODS:
   - Firebase/Database (8.14.0):
     - Firebase/CoreOnly
     - FirebaseDatabase (~> 8.14.0)
+  - Firebase/Firestore (8.14.0):
+    - Firebase/CoreOnly
+    - FirebaseFirestore (~> 8.14.0)
   - Firebase/Functions (8.14.0):
     - Firebase/CoreOnly
     - FirebaseFunctions (~> 8.14.0)
@@ -51,6 +58,11 @@ PODS:
   - FirebaseDatabase (8.14.0):
     - FirebaseCore (~> 8.0)
     - leveldb-library (~> 1.22)
+  - FirebaseFirestore (8.14.0):
+    - FirebaseFirestore/AutodetectLeveldb (= 8.14.0)
+  - FirebaseFirestore/AutodetectLeveldb (8.14.0):
+    - FirebaseFirestore/Base
+  - FirebaseFirestore/Base (8.14.0)
   - FirebaseFunctions (8.14.0):
     - FirebaseCore (~> 8.0)
     - GTMSessionFetcher/Core (~> 1.5)
@@ -119,12 +131,14 @@ PODS:
     - StripeCore (= 21.12.0)
 
 DEPENDENCIES:
+  - cloud_firestore (from `.symlinks/plugins/cloud_firestore/ios`)
   - cloud_functions (from `.symlinks/plugins/cloud_functions/ios`)
   - device_info_plus (from `.symlinks/plugins/device_info_plus/ios`)
   - firebase_auth (from `.symlinks/plugins/firebase_auth/ios`)
   - firebase_core (from `.symlinks/plugins/firebase_core/ios`)
   - firebase_database (from `.symlinks/plugins/firebase_database/ios`)
   - firebase_messaging (from `.symlinks/plugins/firebase_messaging/ios`)
+  - FirebaseFirestore (from `https://github.com/invertase/firestore-ios-sdk-frameworks.git`, tag `8.14.0`)
   - Flutter (from `Flutter`)
   - pdfx (from `.symlinks/plugins/pdfx/ios`)
   - stripe_ios (from `.symlinks/plugins/stripe_ios/ios`)
@@ -151,6 +165,8 @@ SPEC REPOS:
     - StripeUICore
 
 EXTERNAL SOURCES:
+  cloud_firestore:
+    :path: ".symlinks/plugins/cloud_firestore/ios"
   cloud_functions:
     :path: ".symlinks/plugins/cloud_functions/ios"
   device_info_plus:
@@ -163,6 +179,9 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/firebase_database/ios"
   firebase_messaging:
     :path: ".symlinks/plugins/firebase_messaging/ios"
+  FirebaseFirestore:
+    :git: https://github.com/invertase/firestore-ios-sdk-frameworks.git
+    :tag: 8.14.0
   Flutter:
     :path: Flutter
   pdfx:
@@ -170,7 +189,13 @@ EXTERNAL SOURCES:
   stripe_ios:
     :path: ".symlinks/plugins/stripe_ios/ios"
 
+CHECKOUT OPTIONS:
+  FirebaseFirestore:
+    :git: https://github.com/invertase/firestore-ios-sdk-frameworks.git
+    :tag: 8.14.0
+
 SPEC CHECKSUMS:
+  cloud_firestore: bcb9e1e28643120b3db0ae3b764ee3aa2c7fc200
   cloud_functions: 0003e860a2af12e1a2baf9a804a681b76f5d58b5
   device_info_plus: e5c5da33f982a436e103237c0c85f9031142abed
   Firebase: 7e8fe528c161b9271d365217a74c16aaf834578e
@@ -182,6 +207,7 @@ SPEC CHECKSUMS:
   FirebaseCore: b84a44ee7ba999e0f9f76d198a9c7f60a797b848
   FirebaseCoreDiagnostics: 92e07a649aeb66352b319d43bdd2ee3942af84cb
   FirebaseDatabase: 8bfbe7bb8d355f9727507bcf4a2116cb3aabdc5e
+  FirebaseFirestore: f054534fcd57b8665db3cd8f19481208437c2de7
   FirebaseFunctions: 72a8e24d3bcba2782f18602b14533b1525ff297c
   FirebaseInstallations: 40bd9054049b2eae9a2c38ef1c3dd213df3605cd
   FirebaseMessaging: 5ebc42d281567658a2cb72b9ef3506e4a1a1a6e4
@@ -199,6 +225,6 @@ SPEC CHECKSUMS:
   StripeCore: 5e38cdea3dc176a32d8797ef312fe1ab41571272
   StripeUICore: c28e371b385f968388ae38bedb93a2723c078442
 
-PODFILE CHECKSUM: 7368163408c647b7eb699d0d788ba6718e18fb8d
+PODFILE CHECKSUM: cefdac14536b87e9ac6c8bca6a62d141ea1bb1f8
 
 COCOAPODS: 1.11.3

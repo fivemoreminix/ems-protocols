@@ -92,40 +92,55 @@ Future<ProtocolCollection?> loadProtocol(String protocol) async {
   return parseProtocolCollectionJson(jsonDecode(json), protocol);
 }
 
+/// onItemBookmarkPressed is a helper function for when a user decides to bookmark
+/// an item. It will call addBookmark if the item was not previously bookmarked,
+/// or removeBookmark if the item was bookmarked. It then shows a SnackBar with
+/// text describing either action.
+///
+/// addBookmark and removeBookmark should update the UserData bookmarks and call
+/// setState().
+
+SnackBar snackBarForItemBookmarkChanged(ProtocolEntry item,
+    {required bool added}) {
+  if (added) {
+    return SnackBar(
+        content: Text('${item.title} has been added to your bookmarks.'));
+  } else {
+    return SnackBar(
+        content: Text('${item.title} has been removed from your bookmarks.'));
+  }
+}
+
+void activateProtocolItem(BuildContext context, ProtocolItem item) {
+  print('Opening ${item.path} in PDF viewer');
+  Navigator.push(
+    context,
+    MaterialPageRoute(
+        builder: (context) => ProtocolPdfPage(
+            PdfControllerPinch(document: PdfDocument.openAsset(item.path)))),
+  );
+}
+
 /// buildProtocolEntryListItem is a helper function for building the items in
 /// protocol entry lists, where there is a protocol entry name and a bookmark
 /// button.
 Widget buildProtocolEntryListItem(BuildContext context,
     {required ProtocolEntry item,
-    required List<String> bookmarkedEntryNames,
     void Function()? onTap,
-    bool? showBookmarkButton,
+    bool showBookmarkButton = true,
+    required bool bookmarked,
+    required void Function(BuildContext context) onBookmarked,
     required void Function(void Function()) setState}) {
   return ListTile(
       title: Text(item.title),
       onTap: onTap,
       trailing: () {
-        bool bookmarked = bookmarkedEntryNames.contains(item.title);
         return (item is ProtocolItem)
             ? IconButton(
                 icon: Icon(bookmarked
                     ? Icons.bookmark_added
                     : Icons.bookmark_add_outlined),
-                onPressed: () {
-                  if (bookmarked) {
-                    setState(() {
-                      bookmarkedEntryNames.remove(item.title);
-                    });
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                        content: Text(
-                            '${item.title} has been removed from your bookmarks.')));
-                  } else {
-                    setState(() => bookmarkedEntryNames.add(item.title));
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                        content: Text(
-                            '${item.title} has been added to your bookmarks.')));
-                  }
-                },
+                onPressed: () => onBookmarked(context),
               )
             : null;
       }());
@@ -135,20 +150,33 @@ class ProtocolsMenu extends StatefulWidget {
   ProtocolsMenu(this.collection,
       {Key? key,
       this.rootCollection,
-      required this.userAccount,
+      required this.userData,
       required this.searchable})
       : super(key: key);
 
   final ProtocolCollection collection;
   final ProtocolCollection? rootCollection;
   bool searchable = false;
-  final UserData userAccount;
+  final UserData userData;
 
   @override
   State<ProtocolsMenu> createState() => _ProtocolsMenuState();
 }
 
 class _ProtocolsMenuState extends State<ProtocolsMenu> {
+  List<String> bookmarks = [];
+
+  @override
+  void initState() {
+    super.initState();
+    updateBookmarks();
+  }
+
+  void updateBookmarks() async {
+    bookmarks = await widget.userData.getBookmarks();
+    setState(() => bookmarks);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -164,7 +192,7 @@ class _ProtocolsMenuState extends State<ProtocolsMenu> {
                           MaterialPageRoute(
                               builder: (context) => ProtocolsSearchPage(
                                   searchableCollection: widget.collection,
-                                  userAccount: widget.userAccount)));
+                                  userData: widget.userData)));
                     },
                   )
                 ]
@@ -174,33 +202,45 @@ class _ProtocolsMenuState extends State<ProtocolsMenu> {
             itemCount: widget.collection.items.length,
             itemBuilder: (BuildContext context, int index) {
               var item = widget.collection.items[index];
+              bool bookmarked = bookmarks.contains(item.title);
 
-              return buildProtocolEntryListItem(context,
-                  item: item,
-                  bookmarkedEntryNames: widget.userAccount.bookmarkedEntryNames,
-                  setState: setState, onTap: () {
-                if (item is ProtocolCollection) {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => ProtocolsMenu(item,
-                              rootCollection: widget.collection,
-                              userAccount: widget.userAccount,
-                              searchable: false)));
-                } else if (item is ProtocolItem) {
-                  print('Opening ${item.path} in PDF viewer');
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => ProtocolPdfPage(
-                            PdfControllerPinch(
-                                document: PdfDocument.openAsset(item.path)))),
-                  );
-                } else {
-                  throw ErrorDescription(
-                      'item must be either ProtocolCollection or ProtocolItem, is ${item.runtimeType} instead');
-                }
-              });
+              return buildProtocolEntryListItem(
+                context,
+                item: item,
+                setState: setState,
+                onTap: () {
+                  if (item is ProtocolCollection) {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => ProtocolsMenu(item,
+                                rootCollection: widget.rootCollection,
+                                userData: widget.userData,
+                                searchable: false)));
+                  } else if (item is ProtocolItem) {
+                    activateProtocolItem(context, item);
+                  } else {
+                    throw ErrorDescription(
+                        'item must be either ProtocolCollection or ProtocolItem, is ${item.runtimeType} instead');
+                  }
+                },
+                bookmarked: bookmarked,
+                onBookmarked: (BuildContext context) async {
+                  if (bookmarked) {
+                    setState(() {
+                      bookmarks.remove(item.title);
+                    });
+                  } else {
+                    setState(() {
+                      bookmarks.add(item.title);
+                    });
+                  }
+                  await widget.userData
+                      .setBookmarks(bookmarks); // Sync with database
+                  ScaffoldMessenger.of(context).showSnackBar(
+                      snackBarForItemBookmarkChanged(item, added: !bookmarked));
+                },
+              );
             }));
   }
 }
@@ -208,11 +248,11 @@ class _ProtocolsMenuState extends State<ProtocolsMenu> {
 /// The ProtocolsSearchPage is a fullscreen page for searching protocols by name.
 class ProtocolsSearchPage extends StatefulWidget {
   const ProtocolsSearchPage(
-      {Key? key, required this.searchableCollection, required this.userAccount})
+      {Key? key, required this.searchableCollection, required this.userData})
       : super(key: key);
 
   final ProtocolCollection searchableCollection;
-  final UserData userAccount;
+  final UserData userData;
 
   @override
   State<ProtocolsSearchPage> createState() => _ProtocolsSearchPageState();
@@ -221,6 +261,18 @@ class ProtocolsSearchPage extends StatefulWidget {
 class _ProtocolsSearchPageState extends State<ProtocolsSearchPage> {
   final controller = TextEditingController();
   List<ProtocolItem> matches = [];
+  List<String> bookmarks = [];
+
+  @override
+  void initState() {
+    super.initState();
+    updateBookmarks();
+  }
+
+  void updateBookmarks() async {
+    bookmarks = await widget.userData.getBookmarks();
+    setState(() => bookmarks);
+  }
 
   void updateMatches(String text) {
     matches.clear();
@@ -266,13 +318,35 @@ class _ProtocolsSearchPageState extends State<ProtocolsSearchPage> {
       ),
       body: ListView.builder(
           itemCount: matches.length,
-          itemBuilder: (context, index) => buildProtocolEntryListItem(
-                context,
-                item: matches[index],
-                bookmarkedEntryNames: widget.userAccount.bookmarkedEntryNames,
-                setState: setState,
-                onTap: () {},
-              )),
+          itemBuilder: (context, index) {
+            ProtocolItem item = matches[index];
+            bool bookmarked = bookmarks.contains(item.title);
+
+            return buildProtocolEntryListItem(
+              context,
+              item: item,
+              setState: setState,
+              onTap: () {
+                // Because of the match algorithm, we know there can only be ProtocolItems
+                activateProtocolItem(context, item);
+              },
+              bookmarked: bookmarked,
+              onBookmarked: (BuildContext context) async {
+                if (bookmarked) {
+                  setState(() {
+                    bookmarks.remove(item.title);
+                  });
+                } else {
+                  setState(() {
+                    bookmarks.add(item.title);
+                  });
+                }
+                await widget.userData.setBookmarks(bookmarks);
+                ScaffoldMessenger.of(context).showSnackBar(
+                    snackBarForItemBookmarkChanged(item, added: !bookmarked));
+              },
+            );
+          }),
     );
   }
 }

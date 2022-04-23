@@ -19,9 +19,8 @@ class AuthGate extends StatelessWidget {
           return const SigninPage(); // Welcome page will lead to the sign in page.
         }
 
-        // Here I'm creating a new UserData with no data, because I have yet to
-        // hook up user accounts to stored data in Firebase yet.
-        return RootPage(userAccount: UserData(bookmarkedEntryNames: []));
+        // User must be signed into Firebase by now, to have UserData
+        return RootPage(userAccount: UserData(FirebaseAuth.instance.currentUser!));
       },
     );
   }

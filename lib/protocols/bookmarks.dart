@@ -3,22 +3,41 @@ import 'package:flutter/material.dart';
 
 import '../main.dart';
 
-class BookmarksPage extends StatelessWidget {
-  BookmarksPage({Key? key, required this.collection, required this.userAccount})
+class BookmarksPage extends StatefulWidget {
+  BookmarksPage({Key? key, required this.collection, required this.userData})
       : super(key: key);
 
   final ProtocolCollection collection;
-  final UserData userAccount;
+  final UserData userData;
+
+  @override
+  State<BookmarksPage> createState() => _BookmarksPageState();
+}
+
+class _BookmarksPageState extends State<BookmarksPage> {
+  List<String> bookmarks = [];
+
+  @override
+  void initState() {
+    super.initState();
+    updateBookmarks();
+  }
+
+  void updateBookmarks() async {
+    bookmarks = await widget.userData.getBookmarks();
+    setState(() => bookmarks);
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(title: const Text("Bookmarks")),
         body: ListView.builder(
-            itemCount: userAccount.bookmarkedEntryNames.length,
+            itemCount: bookmarks.length,
             itemBuilder: (context, index) {
-              var bookmarkTitle = userAccount.bookmarkedEntryNames[index];
-              var item = collection.getItemByTitle(bookmarkTitle);
+              var bookmarkTitle = bookmarks[index];
+              var item = widget.collection.getItemByTitle(bookmarkTitle);
+
               // TODO: if item is null, remove entry from account
               if (item != null) {
                 // TODO: replace this with buildProtocolEntryListItem.
