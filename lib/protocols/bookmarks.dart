@@ -1,7 +1,7 @@
-import 'package:ems_protocols/protocols_menu.dart';
+import 'package:ems_protocols/protocols/protocols_menu.dart';
 import 'package:flutter/material.dart';
 
-import 'main.dart';
+import '../main.dart';
 
 class BookmarksPage extends StatelessWidget {
   BookmarksPage({Key? key, required this.collection, required this.userAccount})

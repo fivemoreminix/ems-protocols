@@ -1,4 +1,4 @@
-import 'package:ems_protocols/payment_screen.dart';
+import 'package:ems_protocols/payment/payment.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 

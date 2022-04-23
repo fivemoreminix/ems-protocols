@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:pdfx/pdfx.dart';
 
-class PdfScreen extends StatelessWidget {
-  const PdfScreen(this.controller, {Key? key}) : super(key: key);
+class ProtocolPdfPage extends StatelessWidget {
+  const ProtocolPdfPage(this.controller, {Key? key}) : super(key: key);
 
   final PdfControllerPinch controller;
 

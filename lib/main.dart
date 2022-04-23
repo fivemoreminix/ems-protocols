@@ -1,9 +1,12 @@
-import 'package:ems_protocols/login.dart';
+import 'package:ems_protocols/auth/login.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 
 import 'firebase_options.dart';
+import 'protocols/bookmarks.dart';
+import 'protocols/protocols_menu.dart';
+import 'settings.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -63,28 +66,65 @@ class _MyAppState extends State<MyApp> {
   }
 }
 
-// payment_screen.dart
-/// NOTE: this is not meant to be included in the app, just kept as an example.
-class PaymentScreen extends StatelessWidget {
+/// The RootPage is the underlying navigator containing the BottomNavigationBar
+/// entries for Protocols, Bookmarks, and Settings.
+class RootPage extends StatefulWidget {
+  RootPage({Key? key, required this.userAccount}) : super(key: key);
+
+  UserData userAccount;
+
+  @override
+  State<RootPage> createState() => _RootPageState();
+}
+
+class _RootPageState extends State<RootPage> {
+  int currentIndex = 0;
+
+  ProtocolCollection protocol = ProtocolCollection('', '', []);
+
+  @override
+  void initState() {
+    super.initState();
+
+    loadProtocol('assets/Northwest AR Regional Protocols 2018').then((value) {
+      if (value == null) {
+        throw ErrorDescription('Protocols is not a ProtocolCollection');
+      } else {
+        setState(() => protocol = value);
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
-      body: Column(
-        children: [
-          CardField(
-            onCardChanged: (card) {
-              print(card);
-            },
+      body: <Widget>[
+        ProtocolsMenu(
+          protocol,
+          userAccount: widget.userAccount,
+          searchable: true,
+        ),
+        BookmarksPage(userAccount: widget.userAccount, collection: protocol),
+        SettingsPage(userAccount: widget.userAccount),
+      ][currentIndex],
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: currentIndex,
+        onTap: (index) => setState(() {
+          currentIndex = index;
+        }),
+        items: const [
+          BottomNavigationBarItem(
+            label: 'Protocols',
+            icon: Icon(Icons.book),
           ),
-          TextButton(
-            onPressed: () async {
-              // create payment method
-              final paymentMethod = await Stripe.instance
-                  .createPaymentMethod(PaymentMethodParams.card());
-            },
-            child: Text('pay'),
-          )
+          BottomNavigationBarItem(
+            label: 'Bookmarks',
+            icon: Icon(Icons.bookmark),
+          ),
+          BottomNavigationBarItem(
+            label: 'Settings',
+            icon: Icon(Icons.settings),
+          ),
         ],
       ),
     );

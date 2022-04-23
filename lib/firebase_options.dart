@@ -60,7 +60,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '138493900131',
     projectId: 'ems-protocols-432c3',
     storageBucket: 'ems-protocols-432c3.appspot.com',
-    iosClientId: '138493900131-2l4gkn110h2f99aastboi5o8h3tpdcob.apps.googleusercontent.com',
+    iosClientId:
+        '138493900131-2l4gkn110h2f99aastboi5o8h3tpdcob.apps.googleusercontent.com',
     iosBundleId: 'com.luke.emsprotocols',
   );
 }

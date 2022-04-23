@@ -1,11 +1,8 @@
-import 'package:ems_protocols/payment_screen.dart';
-import 'package:ems_protocols/root.dart';
 import 'package:ems_protocols/utils.dart';
-import 'package:ems_protocols/welcome.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-import 'main.dart';
+import '../main.dart';
 
 /// AuthGate checks if a user is signed into Firebase before allowing them to
 /// access content in the app. A user not signed in will be directed to a sign-in

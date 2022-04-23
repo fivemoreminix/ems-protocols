@@ -1,10 +1,11 @@
 import 'dart:convert';
 
 import 'package:ems_protocols/main.dart';
-import 'package:ems_protocols/pdf_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:pdfx/pdfx.dart';
+
+import 'pdf_viewer.dart';
 
 /// A ProtocolEntry is the base class for ProtocolCollection and ProtocolItem
 /// for OOP to represent the protocols in code.
@@ -191,8 +192,9 @@ class _ProtocolsMenuState extends State<ProtocolsMenu> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => PdfScreen(PdfControllerPinch(
-                            document: PdfDocument.openAsset(item.path)))),
+                        builder: (context) => ProtocolPdfPage(
+                            PdfControllerPinch(
+                                document: PdfDocument.openAsset(item.path)))),
                   );
                 } else {
                   throw ErrorDescription(

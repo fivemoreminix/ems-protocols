@@ -1,5 +1,5 @@
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:ems_protocols/login.dart';
+import 'package:ems_protocols/auth/login.dart';
 import 'package:flutter/material.dart';
 
 /// The WelcomePage is where new users and potential buyers are introduced to the
