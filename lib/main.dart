@@ -115,7 +115,7 @@ class _RootPageState extends State<RootPage> {
   void initState() {
     super.initState();
 
-    loadProtocol('assets/Northwest AR Regional Protocols 2018').then((value) {
+    loadProtocol('assets/NWARProtocols2018').then((value) {
       if (value == null) {
         throw ErrorDescription('Protocols is not a ProtocolCollection');
       } else {

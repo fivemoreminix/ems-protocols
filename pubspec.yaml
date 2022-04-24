@@ -54,17 +54,8 @@ flutter:
 
   assets:
     - assets/
-    - assets/Northwest AR Regional Protocols 2018/
-    - assets/Northwest AR Regional Protocols 2018/Protocols/
-    - assets/Northwest AR Regional Protocols 2018/Protocols/Cardiac and Resuscitation/
-    - assets/Northwest AR Regional Protocols 2018/Protocols/General Protocols/
-    - assets/Northwest AR Regional Protocols 2018/Protocols/Medical and Environmental Emergencies/
-    - assets/Northwest AR Regional Protocols 2018/Protocols/Obstetrics/
-    - assets/Northwest AR Regional Protocols 2018/Protocols/Pediatric/
-    - assets/Northwest AR Regional Protocols 2018/Protocols/Respiratory/
-    - assets/Northwest AR Regional Protocols 2018/Protocols/Trauma/
-    - assets/Northwest AR Regional Protocols 2018/Medications/
-    - assets/Northwest AR Regional Protocols 2018/Guidelines/
+    - assets/images/
+    - assets/NWARProtocols2018/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
