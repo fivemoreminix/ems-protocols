@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:pdfx/pdfx.dart';
 
-class ProtocolImagePage extends StatelessWidget {
-  const ProtocolImagePage(this.image, {Key? key}) : super(key: key);
+class ProtocolViewerPage extends StatelessWidget {
+  const ProtocolViewerPage(this.image, {Key? key}) : super(key: key);
 
   final ImageProvider image;
 

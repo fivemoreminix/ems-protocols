@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:pdfx/pdfx.dart';
 
-import 'pdf_viewer.dart';
+import 'protocol_viewer.dart';
 
 /// A ProtocolEntry is the base class for ProtocolCollection and ProtocolItem
 /// for OOP to represent the protocols in code.
@@ -116,7 +116,7 @@ void activateProtocolItem(BuildContext context, ProtocolItem item) {
   Navigator.push(
     context,
     MaterialPageRoute(
-        builder: (context) => ProtocolImagePage(AssetImage(item.path))),
+        builder: (context) => ProtocolViewerPage(AssetImage(item.path))),
     // ProtocolPdfPage(PdfControllerPinch(document: PdfDocument.openAsset('assets/NWARProtocols2018/Page_Page_001.jpg')))
   );
 }
