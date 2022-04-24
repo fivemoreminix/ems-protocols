@@ -75,11 +75,6 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-
-    // userAccount = Account(
-    //     email: 'thelukaswils@gmail.com',
-    //     name: 'Luke',
-    //     bookmarkedEntryNames: []);
   }
 
   @override

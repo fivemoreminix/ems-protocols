@@ -28,6 +28,11 @@ class _BookmarksPageState extends State<BookmarksPage> {
     setState(() => bookmarks);
   }
 
+  Future<void> removeBookmark(String title) async {
+    setState(() => bookmarks.remove(title));
+    return widget.userData.setBookmarks(bookmarks);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,20 +43,23 @@ class _BookmarksPageState extends State<BookmarksPage> {
               var bookmarkTitle = bookmarks[index];
               var item = widget.collection.getItemByTitle(bookmarkTitle);
 
-              // TODO: if item is null, remove entry from account
               if (item != null) {
-                // TODO: replace this with buildProtocolEntryListItem.
-                return ListTile(
-                  title: Text(item.title),
-                  onTap:
-                      () {}, // TODO: handle tapping bookmark items (fixed by above)
-                  trailing: IconButton(
-                    icon: const Icon(Icons.bookmark_remove),
-                    onPressed: () {},
-                  ),
+                return buildProtocolEntryListItem(context,
+                  setState: setState,
+                  item: item,
+                  onTap: () => activateProtocolItem(context, item),
+                  bookmarked: true,
+                  onBookmarked: (BuildContext context) async {
+                    // User removed bookmark.
+                    await removeBookmark(bookmarkTitle);
+                    ScaffoldMessenger.of(context).showSnackBar(snackBarForItemBookmarkChanged(item, added: false));
+                  },
                 );
               } else {
-                return Text('Null entry $bookmarkTitle');
+                () async {
+                  await removeBookmark(bookmarkTitle);
+                }();
+                return Text("Couldn't locate $bookmarkTitle, removed.");
               }
             }));
   }
