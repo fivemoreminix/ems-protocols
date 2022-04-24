@@ -116,7 +116,8 @@ void activateProtocolItem(BuildContext context, ProtocolItem item) {
   Navigator.push(
     context,
     MaterialPageRoute(
-        builder: (context) => ProtocolViewerPage(AssetImage(item.path))),
+        builder: (context) => ProtocolViewerPage(
+            title: item.title, image: AssetImage(item.path))),
     // ProtocolPdfPage(PdfControllerPinch(document: PdfDocument.openAsset('assets/NWARProtocols2018/Page_Page_001.jpg')))
   );
 }

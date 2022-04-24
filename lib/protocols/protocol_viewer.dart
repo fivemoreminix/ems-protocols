@@ -2,14 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:pdfx/pdfx.dart';
 
 class ProtocolViewerPage extends StatelessWidget {
-  const ProtocolViewerPage(this.image, {Key? key}) : super(key: key);
+  const ProtocolViewerPage({Key? key, this.title, required this.image}) : super(key: key);
 
+  final String? title;
   final ImageProvider image;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(title: Text(title ?? "")),
       body: Center(
         child: InteractiveViewer(
           clipBehavior: Clip.none,
