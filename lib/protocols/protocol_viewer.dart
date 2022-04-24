@@ -12,6 +12,9 @@ class ProtocolViewerPage extends StatelessWidget {
       appBar: AppBar(),
       body: Center(
         child: InteractiveViewer(
+          clipBehavior: Clip.none,
+          minScale: 0.1,
+          maxScale: 5.0,
           child: Image(
             image: image,
           ),
