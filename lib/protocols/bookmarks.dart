@@ -25,7 +25,9 @@ class _BookmarksPageState extends State<BookmarksPage> {
 
   void updateBookmarks() async {
     bookmarks = await widget.userData.getBookmarks();
-    setState(() => bookmarks);
+    if (mounted) {
+      setState(() => bookmarks);
+    }
   }
 
   Future<void> removeBookmark(String title) async {

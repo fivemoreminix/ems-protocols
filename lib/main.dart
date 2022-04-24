@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ems_protocols/auth/login.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
@@ -16,6 +17,16 @@ Future<void> main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
+  if (kIsWeb) {
+    // Firestore persistence for web:
+    await FirebaseFirestore.instance.enablePersistence();
+    print('Persistence enabled');
+  } else {
+    // ... and for all other platforms:
+    FirebaseFirestore.instance.settings =
+    const Settings(persistenceEnabled: true);
+  }
 
   Stripe.publishableKey =
       'pk_test_51JXVOWLDqrxoI548GLevEjTDseiKvNagUeAkO4mskctNEYBt25SDin8jytwcQ9Pj0hdjmwqWtorMf4vODlpvL32f00XmXF0Kv2';

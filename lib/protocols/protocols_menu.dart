@@ -175,7 +175,9 @@ class _ProtocolsMenuState extends State<ProtocolsMenu> {
 
   void updateBookmarks() async {
     bookmarks = await widget.userData.getBookmarks();
-    setState(() => bookmarks);
+    if (mounted) {
+      setState(() => bookmarks);
+    }
   }
 
   @override
@@ -272,7 +274,9 @@ class _ProtocolsSearchPageState extends State<ProtocolsSearchPage> {
 
   void updateBookmarks() async {
     bookmarks = await widget.userData.getBookmarks();
-    setState(() => bookmarks);
+    if (mounted) {
+      setState(() => bookmarks);
+    }
   }
 
   void updateMatches(String text) {
