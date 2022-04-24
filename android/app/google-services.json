@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "138493900131",
+    "project_id": "ems-protocols-432c3",
+    "storage_bucket": "ems-protocols-432c3.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:138493900131:android:a6b11f4bd4469e294b8f56",
+        "android_client_info": {
+          "package_name": "com.example.ems_protocols"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "138493900131-52sjofbl1bjpfr413tajod4r4ktcegsg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC642ZZwX7gjloHdamedHdYmdJkjN7ONKc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "138493900131-52sjofbl1bjpfr413tajod4r4ktcegsg.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "138493900131-2l4gkn110h2f99aastboi5o8h3tpdcob.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.luke.emsprotocols"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
