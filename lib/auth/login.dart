@@ -15,6 +15,25 @@ bool isAuthUserAnOwner() {
   return !user.email!.endsWith(usernameEmailSuffix);
 }
 
+final emailRegexp = RegExp(
+    r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+");
+
+bool isEmail(String text) {
+  return emailRegexp.hasMatch(text);
+}
+
+Widget passwordFormField(BuildContext context,
+    {TextEditingController? controller,
+    String? hintText,
+    void Function(String)? onChanged}) {
+  return TextFormField(
+    controller: controller,
+    decoration: InputDecoration(hintText: hintText),
+    obscureText: true,
+    onChanged: onChanged,
+  );
+}
+
 /// AuthGate checks if a user is signed into Firebase before allowing them to
 /// access content in the app. A user not signed in will be directed to a sign-in
 /// page.
@@ -51,13 +70,6 @@ class _LoginPageState extends State<LoginPage> {
   String? errorMessage;
   bool loading = false;
 
-  final emailRegexp = RegExp(
-      r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+");
-
-  bool isEmail(String text) {
-    return emailRegexp.hasMatch(text);
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -80,19 +92,11 @@ class _LoginPageState extends State<LoginPage> {
                       controller: userController,
                       decoration:
                           const InputDecoration(hintText: 'username or email')),
-                  TextFormField(
+                  passwordFormField(
+                    context,
                     controller: passController,
-                    decoration: const InputDecoration(hintText: 'password'),
-                    obscureText: true,
+                    hintText: 'password',
                   ),
-                  if (errorMessage != null)
-                    Text(
-                      errorMessage!,
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodyMedium
-                          ?.copyWith(color: Colors.red),
-                    ),
                   const SizedBox(height: 8.0),
                   Center(
                       child: ElevatedButton(
@@ -136,6 +140,15 @@ class _LoginPageState extends State<LoginPage> {
                       }
                     },
                   )),
+                  const SizedBox(height: 8),
+                  if (errorMessage != null)
+                    Text(
+                      errorMessage!,
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyMedium
+                          ?.copyWith(color: Colors.red),
+                    ),
                   TextButton(
                     child: const Text('Create an account'),
                     onPressed: () {

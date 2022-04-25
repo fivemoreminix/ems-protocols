@@ -29,6 +29,13 @@ class _PaymentPageState extends State<PaymentPage> {
             child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text('\$200', style: TextStyle(fontSize: 32)),
+                Text('/mo', style: TextStyle(color: Colors.grey, fontSize: 24)),
+              ],
+            ),
             const Text('Billing Information'),
             TextField(
               decoration: const InputDecoration(hintText: 'Name or company'),
