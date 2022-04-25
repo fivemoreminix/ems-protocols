@@ -16,7 +16,7 @@ class AuthGate extends StatelessWidget {
       stream: FirebaseAuth.instance.authStateChanges(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
-          return const SigninPage(); // Welcome page will lead to the sign in page.
+          return const LoginPage(); // Welcome page will lead to the sign in page.
         }
 
         // User must be signed into Firebase by now, to have UserData
@@ -27,63 +27,25 @@ class AuthGate extends StatelessWidget {
   }
 }
 
-class SigninPage extends StatefulWidget {
-  const SigninPage({Key? key}) : super(key: key);
+class LoginPage extends StatefulWidget {
+  const LoginPage({Key? key}) : super(key: key);
 
   @override
-  State<SigninPage> createState() => _SigninPageState();
+  State<LoginPage> createState() => _LoginPageState();
 }
 
-class _SigninPageState extends State<SigninPage> {
-  bool showAdminForm = false;
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(title: const Text('Sign in')),
-        body: GenericSignin(
-          // I use this generic sign in form to present one for admin accounts
-          // and another for users.
-          onSwitchForms: () {
-            setState(() => showAdminForm = !showAdminForm);
-          },
-          subtitleText: showAdminForm ? 'For admins and owners' : 'For users',
-          switchFormsText:
-              showAdminForm ? 'Go to user login' : 'Go to owner login',
-          userFieldType:
-              showAdminForm ? _UserFieldType.email : _UserFieldType.username,
-        ));
-  }
-}
-
-enum _UserFieldType {
-  email,
-  username,
-}
-
-class GenericSignin extends StatefulWidget {
-  const GenericSignin(
-      {Key? key,
-      required this.onSwitchForms,
-      required this.subtitleText,
-      required this.switchFormsText,
-      required this.userFieldType})
-      : super(key: key);
-
-  final Function() onSwitchForms;
-  final String subtitleText;
-  final String switchFormsText;
-  final _UserFieldType userFieldType;
-
-  @override
-  State<GenericSignin> createState() => _GenericSigninState();
-}
-
-class _GenericSigninState extends State<GenericSignin> {
+class _LoginPageState extends State<LoginPage> {
   final userController = TextEditingController();
   final passController = TextEditingController();
   String? errorMessage;
   bool loading = false;
+
+  final emailRegexp = RegExp(
+      r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+");
+
+  bool isEmail(String text) {
+    return emailRegexp.hasMatch(text);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -99,33 +61,14 @@ class _GenericSigninState extends State<GenericSignin> {
                       child: Text('EMS Protocols',
                           style: Theme.of(context).textTheme.headline2)),
                   const SizedBox(height: 32.0),
-                  Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                    Text(
-                      'Sign in',
-                      style: Theme.of(context).textTheme.headline4,
-                    ),
-                    const Spacer(),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Text(
-                          widget.subtitleText,
-                          style: Theme.of(context).textTheme.subtitle1,
-                        ),
-                        TextButton(
-                          child: Text(widget.switchFormsText),
-                          onPressed: widget.onSwitchForms,
-                        ),
-                      ],
-                    )
-                  ]),
+                  Text(
+                    'Sign in',
+                    style: Theme.of(context).textTheme.headline4,
+                  ),
                   TextFormField(
                       controller: userController,
-                      decoration: InputDecoration(
-                          hintText:
-                              (widget.userFieldType == _UserFieldType.email)
-                                  ? 'email address'
-                                  : 'username')),
+                      decoration:
+                          const InputDecoration(hintText: 'username or email')),
                   TextFormField(
                     controller: passController,
                     decoration: const InputDecoration(hintText: 'password'),
@@ -145,30 +88,29 @@ class _GenericSigninState extends State<GenericSignin> {
                     child: const Text('Sign in'),
                     onPressed: () async {
                       setState(() => loading = true);
-                      try {
-                        var user = userController.text.trim();
-                        if (widget.userFieldType == _UserFieldType.username) {
-                          user +=
-                              usernameEmailSuffix; // Some arbitrary but constant domain for managed accounts
-                        }
-                        final pass = passController.text;
 
+                      String user = userController.text.trim();
+                      if (!isEmail(user)) {
+                        user +=
+                            usernameEmailSuffix; // Make the username a fake email
+                      }
+                      final pass = passController.text;
+
+                      try {
                         await FirebaseAuth.instance.signInWithEmailAndPassword(
                             email: user, password: pass);
                       } catch (e) {
                         final exc = e as FirebaseAuthException;
                         switch (exc.code) {
                           case 'invalid-email':
-                            errorMessage =
-                                (widget.userFieldType == _UserFieldType.email)
-                                    ? "Invalid email address"
-                                    : "Invalid username";
+                            errorMessage = 'Invalid username or email address.';
                             break;
                           case 'user-disabled':
-                            errorMessage = "Your account has been disabled";
+                            errorMessage =
+                                "Unable to login: your account was disabled.";
                             break;
                           case 'user-not-found':
-                            errorMessage = "Your account cannot be found.";
+                            errorMessage = "The account with that username or email could not be found.";
                             break;
                           case 'wrong-password':
                             errorMessage =

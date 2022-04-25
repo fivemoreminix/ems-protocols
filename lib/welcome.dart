@@ -33,7 +33,7 @@ class WelcomePage extends StatelessWidget {
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) =>
-                                              const SigninPage()));
+                                              const LoginPage()));
                                 },
                                 child: const Text('Sign in')),
                             ElevatedButton(
