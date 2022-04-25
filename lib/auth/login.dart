@@ -1,8 +1,19 @@
-import 'package:ems_protocols/utils.dart';
+import 'package:ems_protocols/auth/register.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import '../main.dart';
+
+const usernameEmailSuffix = 'ghost@emsprotocolsapp.com';
+
+/// isAuthUserAnOwner returns true if the email field does not end with
+/// 'ghost@emsprotocolsapp.com'.
+bool isAuthUserAnOwner() {
+  var user = FirebaseAuth.instance.currentUser;
+  if (user == null) return false;
+  // Asserting email is not null because an account can only be opened with email and password.
+  return !user.email!.endsWith(usernameEmailSuffix);
+}
 
 /// AuthGate checks if a user is signed into Firebase before allowing them to
 /// access content in the app. A user not signed in will be directed to a sign-in
@@ -110,7 +121,8 @@ class _LoginPageState extends State<LoginPage> {
                                 "Unable to login: your account was disabled.";
                             break;
                           case 'user-not-found':
-                            errorMessage = "The account with that username or email could not be found.";
+                            errorMessage =
+                                "The account with that username or email could not be found.";
                             break;
                           case 'wrong-password':
                             errorMessage =
@@ -126,7 +138,12 @@ class _LoginPageState extends State<LoginPage> {
                   )),
                   TextButton(
                     child: const Text('Create an account'),
-                    onPressed: () {}, // TODO: create an account handler
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const RegisterPage()));
+                    },
                   )
                 ],
               ))),
