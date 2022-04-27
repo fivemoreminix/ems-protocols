@@ -114,9 +114,8 @@ class _LoginPageState extends State<LoginPage> {
                       try {
                         await FirebaseAuth.instance.signInWithEmailAndPassword(
                             email: user, password: pass);
-                      } catch (e) {
-                        final exc = e as FirebaseAuthException;
-                        switch (exc.code) {
+                      } on FirebaseAuthException catch (e) {
+                        switch (e.code) {
                           case 'invalid-email':
                             errorMessage = 'Invalid username or email address.';
                             break;
@@ -132,9 +131,12 @@ class _LoginPageState extends State<LoginPage> {
                             errorMessage =
                                 "That password is not correct for your account.";
                             break;
+                          case 'network-request-failed': // User has no wifi connection
+                            errorMessage = 'You are not connected to the internet.';
+                            break;
                           default:
                             throw ErrorDescription(
-                                'Unhandled FirebaseAuthException code');
+                                'Unhandled FirebaseAuthException code: $e');
                         }
                         setState(() => loading = false);
                       }
